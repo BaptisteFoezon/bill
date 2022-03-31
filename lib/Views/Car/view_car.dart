@@ -1,13 +1,9 @@
-import 'dart:ui';
-
 import 'package:bill/models/user_app.dart';
-import 'package:bill/Views/home/home_page.dart';
 import 'package:bill/Views/nav_screen.dart';
-import 'package:bill/Views/splash_screen.dart';
 import 'package:bill/models/car.dart';
-import 'package:bill/Views/widgets/facture_list.dart';
-import 'package:flutter/foundation.dart';
+import 'package:bill/Views/Facture/facture_list.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class viewCarScreen extends StatelessWidget {
   UserApp user;
@@ -68,6 +64,11 @@ class viewCarScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              QrImage(
+                                data: car.carId,
+                                version: QrVersions.auto,
+                                size: 100.0,
+                              ),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -110,15 +111,7 @@ class viewCarScreen extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 100,
-            child: Container(
-              height: 50,
-              width: 100,
-              color: Colors.black,
-            ),
-          ),
-          SizedBox(
-            height: 200,
+            height: 150,
             child: FactureList(user: user, car: car),
           ),
           SizedBox(

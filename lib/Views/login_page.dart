@@ -54,6 +54,7 @@ class _LoginState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final bool isDesktop = Responsive.isDesktop(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Row(

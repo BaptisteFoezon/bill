@@ -1,6 +1,6 @@
 {
-    "name": "bill",
-    "short_name": "bill",
+    "name": "tests",
+    "short_name": "tests",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

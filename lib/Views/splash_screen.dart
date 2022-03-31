@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bill/Views/login_page.dart';
 import 'package:bill/Views/nav_screen.dart';
+import 'package:bill/Views/widgets/loading.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:bill/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 5), () {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
+        debugPrint("page ");
         DataBase().getUser(user.uid).then(
               (value) => {
                 Navigator.of(context).push(
@@ -35,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
             );
       } else {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return LoginPage();
+          return const LoginPage();
         }));
       }
     });
@@ -43,6 +45,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Loading(
+      color: Colors.black,
+    );
   }
 }

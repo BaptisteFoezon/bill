@@ -1,5 +1,6 @@
 import 'package:bill/Views/Car/add_car.dart';
 import 'package:bill/Views/home/widget/emptycard.dart';
+import 'package:bill/Views/nav_screen.dart';
 import 'package:bill/Views/widgets/customDrawer.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:bill/models/car.dart';
@@ -65,6 +66,9 @@ class HomeScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(maxwith - 16, 20),
@@ -82,21 +86,41 @@ class HomeScreen extends StatelessWidget {
               icon: const Icon(Icons.car_rental),
               label: const Text("Ajouter une voiture"),
             ),
+            const SizedBox(height: 10),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(maxwith - 16, 20),
                 primary: Colors.black,
               ),
-              onPressed: () => {},
+              onPressed: () => {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      debugPrint("Material Page route");
+                      return NavScreen(user: user, index: 2);
+                    },
+                  ),
+                )
+              },
               icon: const Icon(Icons.file_download),
               label: const Text("Ajouter une facture"),
             ),
+            const SizedBox(height: 10),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(maxwith - 16, 20),
                 primary: Colors.black,
               ),
-              onPressed: () => {},
+              onPressed: () => {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      debugPrint("Material Page route");
+                      return NavScreen(user: user, index: 1);
+                    },
+                  ),
+                )
+              },
               icon: const Icon(Icons.file_copy),
               label: const Text("Voir mes factures"),
             ),

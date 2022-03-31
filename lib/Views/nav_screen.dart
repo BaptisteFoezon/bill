@@ -1,8 +1,7 @@
-import 'package:bill/Views/facturescreen.dart';
+import 'package:bill/Views/Facture/facturescreen.dart';
 import 'package:bill/Views/profile/profile_screen.dart';
 import 'package:bill/Views/scan/scan_screen.dart';
 import 'package:bill/Views/widgets/loading.dart';
-import 'package:bill/models/car.dart';
 import 'package:bill/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:bill/models/user_app.dart';
@@ -56,6 +55,7 @@ class _NavScreenState extends State<NavScreen> {
       child: FutureBuilder(
         future: DataBase().getUser(widget.user.id),
         builder: (BuildContext context, AsyncSnapshot<UserApp> user) {
+          debugPrint("build tab controller");
           if (user.hasData) {
             UserApp _userApp = UserApp(
               id: user.data!.id,
@@ -80,7 +80,9 @@ class _NavScreenState extends State<NavScreen> {
               ),
             );
           } else {
-            return const Loading();
+            return const Loading(
+              color: Colors.black,
+            );
           }
         },
       ),

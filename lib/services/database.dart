@@ -19,7 +19,9 @@ class DataBase {
   }
 
   Future<UserApp> getUser(String userid) async {
+    print("get user");
     dynamic test = await userCollection.doc(userid).get();
+    print("test");
     debugPrint(test.toString());
     return UserApp(
         id: test['id'],
@@ -45,6 +47,10 @@ class DataBase {
   }
 
   //get list of use car
+
+  Stream<QuerySnapshot> getCarStream(UserApp user) {
+    return userCollection.doc(user.id).collection("Cars").snapshots();
+  }
 
   Future<List<Car>> getCars(UserApp user) async {
     debugPrint("get cars ....");
@@ -104,15 +110,42 @@ class DataBase {
                   debugPrint(item["scanurl"]),
                   debugPrint(item["nom"]),
                   debugPrint(item["carid"]),
-                  debugPrint(item["data"]),
                   factures.add(
                     Facture(
-                      nom: item["nom"],
-                      carid: item["carid"],
-                      commentaire: item["commentaire"],
-                      date: DateTime.now(),
-                      scanurl: item["scanurl"],
-                    ),
+                        nom: item["nom"],
+                        carid: item["carid"],
+                        commentaire: item["commentaire"],
+                        date: item["date"].toDate(),
+                        scanurl: item["scanurl"],
+                        factureid: item["factureid"]),
+                  )
+                }
+            });
+    return factures;
+  }
+
+  Future<List<Facture>> getAllFactures(UserApp user) async {
+    debugPrint("get facture ....");
+    List<Facture> factures = [];
+    await userCollection
+        .doc(user.id)
+        .collection("Factures")
+        .get()
+        .then((value) => {
+              for (dynamic item in value.docs)
+                {
+                  debugPrint("Facture from firebase :"),
+                  debugPrint(item["scanurl"]),
+                  debugPrint(item["nom"]),
+                  debugPrint(item["carid"]),
+                  factures.add(
+                    Facture(
+                        nom: item["nom"],
+                        carid: item["carid"],
+                        commentaire: item["commentaire"],
+                        date: item["date"].toDate(),
+                        scanurl: item["scanurl"],
+                        factureid: item["factureid"]),
                   )
                 }
             });

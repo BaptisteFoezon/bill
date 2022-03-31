@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'Views/splash_screen.dart';
 import 'Views/widgets/loading.dart';
 
@@ -25,6 +25,14 @@ class MyApp extends StatelessWidget {
         title: 'Bill',
         theme: ThemeData(),
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('fr', ''), // English, no country code
+        ],
         home: SplashScreen());
   }
 }

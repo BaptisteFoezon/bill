@@ -4,12 +4,14 @@ class Facture {
   String commentaire;
   String carid;
   String scanurl = "";
+  String factureid = "";
 
   Facture({
     required this.nom,
     required this.date,
     required this.commentaire,
     required this.carid,
-    this.scanurl = "",
+    required this.scanurl,
+    required this.factureid,
   });
 }

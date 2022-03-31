@@ -10,51 +10,22 @@ customDrawer(UserApp user, BuildContext context) {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(child: Text("data")),
-          ListTile(
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NavScreen(
-                    user: user,
-                    index: 0,
-                  ),
+          DrawerHeader(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.blue,
                 ),
-              ),
-            },
-            title: const Text(
-              "Tableau de bord",
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            leading: const Icon(
-              Icons.dashboard,
-              color: Colors.white,
-            ),
-          ),
-          ListTile(
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NavScreen(
-                    user: user,
-                    index: 1,
-                  ),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-            },
-            title: const Text(
-              "Factures",
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            leading: const Icon(
-              Icons.file_copy,
-              color: Colors.white,
+                Text(
+                  "Hey !",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
             ),
           ),
           ListTile(
@@ -95,7 +66,7 @@ customDrawer(UserApp user, BuildContext context) {
             onTap: () => {
               FirebaseAuth.instance.signOut(),
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return LoginPage();
+                return const LoginPage();
               }))
             },
             title: const Text(
