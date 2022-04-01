@@ -1,7 +1,6 @@
 import 'package:bill/models/car.dart';
 import 'package:bill/models/facture.dart';
 import 'package:bill/models/user_app.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -44,6 +43,20 @@ class DataBase {
       "nbkilometre": car.nbKilometre,
       "carId": "",
     });
+  }
+
+  Future<void> transfertCar(
+      UserApp user, String usertransfert, String carId) async {
+    UserApp userTransfert =
+        UserApp(id: usertransfert, nom: "nom", email: "email", phone: "phone");
+    Car car = await getCarFromID(carId, user);
+    addCar(userTransfert, car);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.id)
+        .collection("Cars")
+        .doc(carId)
+        .delete();
   }
 
   //get list of use car
@@ -160,6 +173,21 @@ class DataBase {
       "carid": facture.carid,
       "date": facture.date,
     });
+  }
+
+  Future<Car> getCarFromID(String idCar, UserApp user) async {
+    debugPrint("id voiture transfé " + idCar);
+    dynamic car =
+        await userCollection.doc(user.id).collection("Cars").doc(idCar).get();
+
+    return Car(
+        marque: car['marque'],
+        annee: car['annee'],
+        modele: car['modele'],
+        userId: user.id,
+        nbKilometre: car['nbkilometre'],
+        numImmatriculation: car['immatriculation'],
+        numChassi: car['N°chasis']);
   }
   // modify factures
 

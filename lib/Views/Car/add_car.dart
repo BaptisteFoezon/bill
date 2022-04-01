@@ -1,9 +1,10 @@
-import 'package:bill/Views/commons/inputstyle.dart';
 import 'package:bill/Views/nav_screen.dart';
 import 'package:bill/models/car.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:bill/services/database.dart';
 import 'package:flutter/material.dart';
+
+import '../widgets/customDrawer.dart';
 
 class AddCarScreen extends StatelessWidget {
   UserApp user;
@@ -31,9 +32,7 @@ class AddCarScreen extends StatelessWidget {
               icon: const Icon(Icons.arrow_back))
         ],
       ),
-      drawer: const Drawer(
-        backgroundColor: Colors.black,
-      ),
+      drawer: customDrawer(user, context),
       body: Container(
         child: Center(
           child: Column(
@@ -46,7 +45,6 @@ class AddCarScreen extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }
 

@@ -1,6 +1,4 @@
-import 'package:bill/Views/widgets/customDrawer.dart';
 import 'package:bill/models/user_app.dart';
-import 'package:bill/services/service.dart';
 import 'package:flutter/material.dart';
 
 class ProfilScreen extends StatelessWidget {
@@ -10,15 +8,6 @@ class ProfilScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        actions: [
-          IconButton(
-              onPressed: () => loggeOut(context),
-              icon: const Icon(Icons.logout))
-        ],
-      ),
-      drawer: customDrawer(user, context),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
@@ -28,16 +17,27 @@ class ProfilScreen extends StatelessWidget {
             ),
             Row(
               children: [
-                const CircleAvatar(radius: 40),
-                const SizedBox(
-                  width: 50,
-                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(user.nom),
-                    Text(user.phone),
-                    Text(user.email),
+                    const Center(child: CircleAvatar(radius: 40)),
+                    const SizedBox(height: 10),
+                    LabelBold(
+                      contenu: user.nom,
+                      title: 'Nom: ',
+                    ),
+                    LabelBold(
+                      contenu: user.phone,
+                      title: 'Téléphone: ',
+                    ),
+                    LabelBold(
+                      contenu: user.email,
+                      title: 'Email: ',
+                    ),
+                    LabelBold(
+                      contenu: user.id,
+                      title: 'Id: ',
+                    ),
                   ],
                 )
               ],
@@ -50,6 +50,32 @@ class ProfilScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class LabelBold extends StatelessWidget {
+  const LabelBold({
+    Key? key,
+    required this.title,
+    required this.contenu,
+  }) : super(key: key);
+
+  final String contenu;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(contenu),
+      ],
     );
   }
 }

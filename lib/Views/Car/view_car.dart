@@ -5,6 +5,8 @@ import 'package:bill/Views/Facture/facture_list.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../widgets/customDrawer.dart';
+
 class viewCarScreen extends StatelessWidget {
   UserApp user;
   Car car;
@@ -33,9 +35,7 @@ class viewCarScreen extends StatelessWidget {
               icon: const Icon(Icons.arrow_back))
         ],
       ),
-      drawer: const Drawer(
-        backgroundColor: Colors.black,
-      ),
+      drawer: customDrawer(user, context),
       body: Container(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,7 +142,7 @@ class viewCarScreen extends StatelessWidget {
             child: Center(
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 60.0, vertical: 15),
+                    const EdgeInsets.symmetric(horizontal: 60.0, vertical: 10),
                 child: Column(
                   children: [
                     const Text(
@@ -161,7 +161,6 @@ class viewCarScreen extends StatelessWidget {
                       height: 10,
                     ),
                     SizedBox(
-                      height: 100,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

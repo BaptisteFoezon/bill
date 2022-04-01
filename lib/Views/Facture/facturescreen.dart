@@ -1,4 +1,3 @@
-import 'package:bill/Views/widgets/customDrawer.dart';
 import 'package:bill/Views/widgets/loading.dart';
 import 'package:bill/models/facture.dart';
 import 'package:bill/models/user_app.dart';
@@ -13,10 +12,6 @@ class FactureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-      ),
-      drawer: customDrawer(user, context),
       body: Column(
         children: [
           const Padding(

@@ -9,6 +9,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../widgets/customDrawer.dart';
+
 // ignore: must_be_immutable
 class FactureDetailScreen extends StatefulWidget {
   Facture facture;
@@ -51,9 +53,7 @@ class _FactureDetailScreenState extends State<FactureDetailScreen> {
               icon: const Icon(Icons.arrow_back))
         ],
       ),
-      drawer: const Drawer(
-        backgroundColor: Colors.black,
-      ),
+      drawer: customDrawer(widget.user, context),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),

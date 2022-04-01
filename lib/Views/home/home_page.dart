@@ -1,17 +1,11 @@
 import 'package:bill/Views/Car/add_car.dart';
 import 'package:bill/Views/home/widget/emptycard.dart';
 import 'package:bill/Views/nav_screen.dart';
-import 'package:bill/Views/widgets/customDrawer.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:bill/models/car.dart';
 import 'package:bill/Views/home/widget/car_list.dart';
 import 'package:bill/Views/home/widget/hello_text.dart';
-import 'package:bill/Views/widgets/loading.dart';
-import 'package:bill/services/database.dart';
-import 'package:bill/services/service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:bill/models/user_app.dart';
 
 class HomeScreen extends StatelessWidget {
   UserApp user;
@@ -30,18 +24,6 @@ class HomeScreen extends StatelessWidget {
     );
     double maxwith = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        actions: [
-          IconButton(
-              onPressed: () => loggeOut(context),
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.white,
-              ))
-        ],
-      ),
-      drawer: customDrawer(user, context),
       body: Padding(
         padding: const EdgeInsets.only(left: 8.0),
         child: Column(

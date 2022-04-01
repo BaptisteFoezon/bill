@@ -11,7 +11,7 @@ final auth = FirebaseAuth.instance;
 loggeOut(context) {
   FirebaseAuth.instance.signOut();
   Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-    return LoginPage();
+    return const LoginPage();
   }));
 }
 

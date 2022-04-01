@@ -1,14 +1,12 @@
 import 'dart:io';
 
 import 'package:bill/Views/nav_screen.dart';
-import 'package:bill/Views/widgets/customDrawer.dart';
 import 'package:bill/models/car.dart';
 import 'package:bill/models/facture.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:bill/Views/widgets/responsive.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fs;
 
-import 'package:bill/services/service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
@@ -88,7 +86,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
   bool electriciteSelect = false;
   bool couroieSelect = false;
   bool embrayageSelect = false;
-  bool SuspensionSelect = false;
+  bool suspensionSelect = false;
   late Blob blob;
 
   static MyData data = MyData();
@@ -101,12 +99,10 @@ class _PhotoScreenState extends State<PhotoScreen> {
           content: Center(
             child: Container(
               child: kIsWeb
-                  ? Container(
-                      child: TextButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.download),
-                          label: const Text("data")),
-                    )
+                  ? TextButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.download),
+                      label: const Text("data"))
                   : Column(
                       children: [
                         Container(
@@ -310,15 +306,6 @@ class _PhotoScreenState extends State<PhotoScreen> {
   Widget build(BuildContext context) {
     final bool isDesktop = Responsive.isDesktop(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        actions: [
-          IconButton(
-              onPressed: () => loggeOut(context),
-              icon: const Icon(Icons.logout))
-        ],
-      ),
-      drawer: customDrawer(widget.user, context),
       body: Form(
         key: _formKey,
         child: Stepper(

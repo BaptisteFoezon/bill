@@ -4,11 +4,12 @@ import 'package:bill/models/user_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../transfert/transfert.dart';
+
 customDrawer(UserApp user, BuildContext context) {
   return Drawer(
       backgroundColor: Colors.black,
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Column(
         children: [
           DrawerHeader(
             child: Column(
@@ -29,7 +30,16 @@ customDrawer(UserApp user, BuildContext context) {
             ),
           ),
           ListTile(
-            onTap: () => {},
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TransfertScreen(
+                    user: user,
+                  ),
+                ),
+              ),
+            },
             title: const Text(
               "Transfert",
               style: TextStyle(color: Colors.white),
@@ -76,6 +86,15 @@ customDrawer(UserApp user, BuildContext context) {
             leading: const Icon(
               Icons.lock,
               color: Colors.white,
+            ),
+          ),
+          const Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                'Bill version 1.0.0 2022',
+                style: TextStyle(color: Colors.blue),
+              ),
             ),
           )
         ],
