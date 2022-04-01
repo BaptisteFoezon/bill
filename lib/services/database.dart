@@ -33,15 +33,15 @@ class DataBase {
 
   // add new car
   Future<void> addCar(UserApp user, Car car) async {
-    await userCollection.doc(user.id).collection("Cars").add({
+    await userCollection.doc(user.id).collection("Cars").doc(car.carId).set({
       "marque": car.marque,
       "modele": car.modele,
       "annee": car.annee,
-      "userId ": car.userId,
+      "userId ": user.id,
       "N°chasis": car.numChassi,
       "immatriculation": car.numImmatriculation,
       "nbkilometre": car.nbKilometre,
-      "carId": "",
+      "carId": car.carId,
     });
   }
 
@@ -50,6 +50,22 @@ class DataBase {
     UserApp userTransfert =
         UserApp(id: usertransfert, nom: "nom", email: "email", phone: "phone");
     Car car = await getCarFromID(carId, user);
+    car.userId = usertransfert;
+    car.urlassurance = "";
+    car.urlcartegrise = "";
+    List<Facture> factures = await getAllFactures(user);
+    for (dynamic item in factures) {
+      Facture facture;
+      facture = item;
+      facture.carid = carId;
+      addFacture(userTransfert, facture);
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.id)
+          .collection("Factures")
+          .doc(facture.factureid)
+          .delete();
+    }
     addCar(userTransfert, car);
     FirebaseFirestore.instance
         .collection('users')
@@ -168,7 +184,64 @@ class DataBase {
 
   // Add facrure
 
+  Future<void> deleteFacture(UserApp user, String carId, docId) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.id)
+        .collection("Cars")
+        .doc(carId)
+        .collection("Factures")
+        .doc(docId)
+        .delete();
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.id)
+        .collection("Factures")
+        .doc(docId)
+        .delete();
+  }
+
   Future<void> addFacture(UserApp user, Facture facture) async {
+    String docid = '';
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.id)
+        .collection("Factures")
+        .add({}).then((docRef) => {
+              docid = docRef.id,
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user.id)
+                  .collection("Factures")
+                  .doc(docRef.id)
+                  .set(
+                {
+                  "nom": facture.nom,
+                  "carid": facture.carid,
+                  "date": facture.date,
+                  "scanurl": facture.scanurl,
+                  "commentaire": facture.commentaire,
+                  "factureid": docRef.id,
+                },
+              )
+            });
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.id)
+        .collection("Cars")
+        .doc(facture.carid)
+        .collection("Factures")
+        .doc(docid)
+        .set(
+      {
+        "nom": facture.nom,
+        "carid": facture.carid,
+        "date": facture.date,
+        "scanurl": facture.scanurl,
+        "commentaire": facture.commentaire,
+        "factureid": docid,
+      },
+    );
     await userCollection.doc(user.id).collection("Factures").add({
       "carid": facture.carid,
       "date": facture.date,
@@ -189,7 +262,4 @@ class DataBase {
         numImmatriculation: car['immatriculation'],
         numChassi: car['N°chasis']);
   }
-  // modify factures
-
-  // get all factures from all the car
 }

@@ -5,6 +5,7 @@ import 'package:bill/models/car.dart';
 import 'package:bill/models/facture.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:bill/Views/widgets/responsive.dart';
+import 'package:bill/services/database.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fs;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -381,46 +382,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
                               commentaire: data.commentaire,
                               carid: data.carId,
                               scanurl: data.url);
-                          String docid = '';
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(widget.user.id)
-                              .collection("Factures")
-                              .add({}).then((docRef) => {
-                                    docid = docRef.id,
-                                    FirebaseFirestore.instance
-                                        .collection('users')
-                                        .doc(widget.user.id)
-                                        .collection("Factures")
-                                        .doc(docRef.id)
-                                        .set(
-                                      {
-                                        "nom": facture.nom,
-                                        "carid": facture.carid,
-                                        "date": facture.date,
-                                        "scanurl": facture.scanurl,
-                                        "commentaire": facture.commentaire,
-                                        "factureid": docRef.id,
-                                      },
-                                    )
-                                  });
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(widget.user.id)
-                              .collection("Cars")
-                              .doc(data.carId)
-                              .collection("Factures")
-                              .doc(docid)
-                              .set(
-                            {
-                              "nom": facture.nom,
-                              "carid": facture.carid,
-                              "date": facture.date,
-                              "scanurl": facture.scanurl,
-                              "commentaire": facture.commentaire,
-                              "factureid": docid,
-                            },
-                          );
+                          DataBase().addFacture(widget.user, facture);
                           Navigator.push(
                             context,
                             MaterialPageRoute(

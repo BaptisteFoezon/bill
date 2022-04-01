@@ -4,7 +4,7 @@ import 'package:bill/models/facture.dart';
 import 'package:bill/Views/Car/view_car.dart';
 import 'package:bill/models/car.dart';
 import 'package:bill/models/user_app.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bill/services/database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -161,20 +161,7 @@ showAlertDialog(
     child: const Text("Suprimer"),
     onPressed: () {
       Navigator.of(context).pop();
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.id)
-          .collection("Cars")
-          .doc(carId)
-          .collection("Factures")
-          .doc(docId)
-          .delete();
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.id)
-          .collection("Factures")
-          .doc(docId)
-          .delete();
+      DataBase().deleteFacture(user, carId, docId);
       Navigator.push(
         context,
         MaterialPageRoute(
