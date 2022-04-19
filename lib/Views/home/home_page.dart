@@ -23,8 +23,8 @@ class HomeScreen extends StatelessWidget {
       numImmatriculation: '',
     );
     double maxwith = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Padding(
+    return Container(
+      child: Padding(
         padding: const EdgeInsets.only(left: 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

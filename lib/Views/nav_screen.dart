@@ -2,7 +2,6 @@ import 'package:bill/Views/Facture/facturescreen.dart';
 import 'package:bill/Views/profile/profile_screen.dart';
 import 'package:bill/Views/scan/scan_screen.dart';
 import 'package:bill/Views/widgets/customDrawer.dart';
-import 'package:bill/Views/widgets/loading.dart';
 import 'package:bill/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:bill/models/user_app.dart';
@@ -52,53 +51,34 @@ class _NavScreenState extends State<NavScreen> {
     int _selectedIndex = widget.index;
 
     return DefaultTabController(
-      initialIndex: widget.index,
-      length: _icons.length,
-      child: FutureBuilder(
-        future: DataBase().getUser(widget.user.id),
-        builder: (BuildContext context, AsyncSnapshot<UserApp> user) {
-          if (user.hasData) {
-            UserApp _userApp = UserApp(
-              id: user.data!.id,
-              nom: user.data!.nom,
-              email: user.data!.email,
-              phone: user.data!.phone,
-            );
-            return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.black,
-                actions: [
-                  IconButton(
-                      onPressed: () => loggeOut(context),
-                      icon: const Icon(Icons.logout))
-                ],
+        initialIndex: widget.index,
+        length: _icons.length,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            actions: [
+              IconButton(
+                  onPressed: () => loggeOut(context),
+                  icon: const Icon(Icons.logout))
+            ],
+          ),
+          drawer: customDrawer(widget.user, context),
+          body: TabBarView(
+            children: _screens,
+          ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: CustomTabBar(
+              icons: _icons,
+              selectedIndex: _selectedIndex,
+              user: widget.user,
+              onTap: (index) => setState(
+                () => {
+                  widget.index = index,
+                },
               ),
-              drawer: customDrawer(_userApp, context),
-              body: TabBarView(
-                children: _screens,
-              ),
-              bottomNavigationBar: Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: CustomTabBar(
-                  icons: _icons,
-                  selectedIndex: _selectedIndex,
-                  user: _userApp,
-                  onTap: (index) => setState(
-                    () => {
-                      _selectedIndex = index,
-                      //depugPrint(index.toString())
-                    },
-                  ),
-                ),
-              ),
-            );
-          } else {
-            return const Loading(
-              color: Colors.black,
-            );
-          }
-        },
-      ),
-    );
+            ),
+          ),
+        ));
   }
 }

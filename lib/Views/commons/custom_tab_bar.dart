@@ -17,7 +17,6 @@ class CustomTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //depugPrint(selectedIndex.toString());
     return TabBar(
       indicatorPadding: EdgeInsets.zero,
       indicator: const BoxDecoration(
