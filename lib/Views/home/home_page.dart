@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
-                      debugPrint("Material Page route");
+                      //depugPrint("Material Page route");
                       return NavScreen(user: user, index: 2);
                     },
                   ),
@@ -97,7 +97,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
-                      debugPrint("Material Page route");
+                      //depugPrint("Material Page route");
                       return NavScreen(user: user, index: 1);
                     },
                   ),

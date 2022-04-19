@@ -27,7 +27,7 @@ class FactureDetailScreen extends StatefulWidget {
 
 class _FactureDetailScreenState extends State<FactureDetailScreen> {
   Future<String> downloadurl(String imagename) async {
-    debugPrint(imagename);
+    //depugPrint(imagename);
     String downloadurl =
         await FirebaseStorage.instance.ref("files/$imagename").getDownloadURL();
     return downloadurl;

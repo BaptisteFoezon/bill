@@ -25,7 +25,7 @@ class FactureScreen extends StatelessWidget {
                 initialData: const <Facture>[],
                 builder: (context, AsyncSnapshot<List<Facture>> factures) {
                   if (factures.hasData) {
-                    debugPrint("factures has data");
+                    //depugPrint("factures has data");
                     dynamic factureList = factures.data;
                     return Scrollbar(
                       child: ListView.builder(

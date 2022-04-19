@@ -1,5 +1,5 @@
-import 'dart:io';
-
+/* import 'dart:async';
+import 'dart:html';import 'dart:typed_data';
 import 'package:bill/Views/widgets/loading.dart';
 import 'package:bill/models/car.dart';
 import 'package:bill/models/facture.dart';
@@ -7,12 +7,10 @@ import 'package:bill/models/user_app.dart';
 import 'package:bill/Views/widgets/responsive.dart';
 import 'package:bill/services/database.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fs;
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 
@@ -39,32 +37,38 @@ class MyData {
 }
 
 class _PhotoScreenState extends State<PhotoScreen> {
-  File _image = File('');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  final picker = ImagePicker();
+  late Uint8List displayImage;
+  late File uploadImage;
+  //final picker = ImagePicker();
   bool loading = false;
   bool transfertOk = false;
 
-  Future getImage(ImageSource source) async {
-    final pickedFile = await picker.pickImage(source: source);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
+  Future getImage() async {
+    FileUploadInputElement? pickedFile = FileUploadInputElement();
+    pickedFile.accept = '.png,.jpg';
+    pickedFile.click();
+    pickedFile.onChange.listen(((e) {
+      final files = pickedFile.files;
+      if (files!.length == 1) {
+        final file = files[0];
+        FileReader reader = FileReader();
+        reader.onLoadEnd.listen((e) async {
+          setState(() {
+            uploadImage = reader.result as File;
+            displayImage = reader.result as Uint8List;
+          });
+        });
       }
-    });
+    }));
   }
 
-  Future<void> uploadFile(String destination, String filePath) async {
-    File file = File(filePath);
+  Future<void> uploadFile(String destination, File uploadFile) async {
 
     try {
       await firebase_storage.FirebaseStorage.instance
-          .ref(destination)
-          .putFile(file);
+          .ref(destination).child('files/${DateTime.now()}.png}')
+          .putFile(uploadFile);
     } on firebase_core.FirebaseException {
       //depugPrint("error !!!!!!!!");
       //depugPrint(e.toString());
@@ -115,19 +119,6 @@ class _PhotoScreenState extends State<PhotoScreen> {
                                   ? Text(basename(_image.toString()))
                                   : Image.file(_image),
                         ),
-                        isDesktop
-                            ? const SizedBox.shrink()
-                            : TextButton.icon(
-                                onPressed: () async {
-                                  await getImage(ImageSource.camera);
-
-                                  setState(() {
-                                    _image = File(_image.path);
-                                  });
-                                },
-                                icon: const Icon(Icons.camera),
-                                label: const Text("scanner une facture"),
-                              ),
                         TextButton.icon(
                           onPressed: () async => getImage(ImageSource.gallery),
                           icon: const Icon(Icons.file_download),
@@ -478,3 +469,4 @@ class SelectedContainer extends StatelessWidget {
     );
   }
 }
+ */

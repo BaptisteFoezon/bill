@@ -13,6 +13,7 @@ class AddCarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -33,15 +34,13 @@ class AddCarScreen extends StatelessWidget {
         ],
       ),
       drawer: customDrawer(user, context),
-      body: Container(
-        child: Center(
-          child: Column(
-            children: [
-              AddForm(
-                user: user,
-              ),
-            ],
-          ),
+      body: Center(
+        child: Column(
+          children: [
+            AddForm(
+              user: user,
+            ),
+          ],
         ),
       ),
     );
@@ -96,75 +95,77 @@ class _AddFormState extends State<AddForm> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Form(
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                      label: Text("name"), hintText: "nom de la voiture"),
-                ),
-                TextFormField(
-                  controller: modeleController,
-                  decoration: const InputDecoration(
-                      label: Text("Modele"), hintText: "modele"),
-                ),
-                TextFormField(
-                  controller: marqueController,
-                  decoration: const InputDecoration(
-                      label: Text("Marque"), hintText: "marque"),
-                ),
-                TextFormField(
-                  controller: anneeController,
-                  decoration: const InputDecoration(
-                      label: Text("Annee"), hintText: "annee"),
-                ),
-                TextFormField(
-                  controller: immatriculationController,
-                  decoration: const InputDecoration(
-                      label: Text("immatricumation"),
-                      hintText: "immatriculation"),
-                ),
-                TextFormField(
-                  controller: nbkilometreController,
-                  decoration: const InputDecoration(
-                      label: Text("Nb de kilommetre"),
-                      hintText: "nb de kilometre"),
-                ),
-                TextFormField(
-                  controller: chassiController,
-                  decoration: const InputDecoration(
-                      label: Text("N° de chassis"), hintText: "XXXXXXXXXX"),
-                ),
-                ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
-                    ),
-                    onPressed: () => {
-                          DataBase().addCar(
-                            widget.user,
-                            Car(
-                              marque: marqueController.text,
-                              annee: anneeController.text,
-                              modele: modeleController.text,
-                              userId: widget.user.id,
-                              nbKilometre: nbkilometreController.text,
-                              numImmatriculation: modeleController.text,
-                              numChassi: modeleController.text,
-                            ),
-                          ),
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NavScreen(
-                                user: widget.user,
-                                index: 0,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                        label: Text("name"), hintText: "nom de la voiture"),
+                  ),
+                  TextFormField(
+                    controller: modeleController,
+                    decoration: const InputDecoration(
+                        label: Text("Modele"), hintText: "modele"),
+                  ),
+                  TextFormField(
+                    controller: marqueController,
+                    decoration: const InputDecoration(
+                        label: Text("Marque"), hintText: "marque"),
+                  ),
+                  TextFormField(
+                    controller: anneeController,
+                    decoration: const InputDecoration(
+                        label: Text("Annee"), hintText: "annee"),
+                  ),
+                  TextFormField(
+                    controller: immatriculationController,
+                    decoration: const InputDecoration(
+                        label: Text("immatricumation"),
+                        hintText: "immatriculation"),
+                  ),
+                  TextFormField(
+                    controller: nbkilometreController,
+                    decoration: const InputDecoration(
+                        label: Text("Nb de kilommetre"),
+                        hintText: "nb de kilometre"),
+                  ),
+                  TextFormField(
+                    controller: chassiController,
+                    decoration: const InputDecoration(
+                        label: Text("N° de chassis"), hintText: "XXXXXXXXXX"),
+                  ),
+                  ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                      ),
+                      onPressed: () async => {
+                            await DataBase().addCar(
+                              widget.user,
+                              Car(
+                                marque: marqueController.text,
+                                annee: anneeController.text,
+                                modele: modeleController.text,
+                                userId: widget.user.id,
+                                nbKilometre: nbkilometreController.text,
+                                numImmatriculation: modeleController.text,
+                                numChassi: modeleController.text,
                               ),
                             ),
-                          ),
-                        },
-                    icon: const Icon(Icons.add),
-                    label: const Text("Ajouter ma voiture"))
-              ],
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NavScreen(
+                                  user: widget.user,
+                                  index: 0,
+                                ),
+                              ),
+                            ),
+                          },
+                      icon: const Icon(Icons.add),
+                      label: const Text("Ajouter ma voiture"))
+                ],
+              ),
             ),
           ),
         ],

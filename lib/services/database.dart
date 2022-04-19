@@ -2,7 +2,6 @@ import 'package:bill/models/car.dart';
 import 'package:bill/models/facture.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class DataBase {
   CollectionReference userCollection =
@@ -21,7 +20,7 @@ class DataBase {
     print("get user");
     dynamic test = await userCollection.doc(userid).get();
     print("test");
-    debugPrint(test.toString());
+    //depugPrint(test.toString());
     return UserApp(
         id: test['id'],
         nom: test['name'],
@@ -31,48 +30,83 @@ class DataBase {
 
   //Modify User info
 
-  // add new car
   Future<void> addCar(UserApp user, Car car) async {
-    await userCollection.doc(user.id).collection("Cars").doc(car.carId).set({
-      "marque": car.marque,
-      "modele": car.modele,
-      "annee": car.annee,
-      "userId ": user.id,
-      "N°chasis": car.numChassi,
-      "immatriculation": car.numImmatriculation,
-      "nbkilometre": car.nbKilometre,
-      "carId": car.carId,
-    });
+    String docid = '';
+    await userCollection
+        .doc(user.id)
+        .collection("Cars")
+        .add({}).then((docRef) => {
+              docid = docRef.id,
+              FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user.id)
+                  .collection("Cars")
+                  .doc(docid)
+                  .set(
+                {
+                  "marque": car.marque,
+                  "modele": car.modele,
+                  "annee": car.annee,
+                  "userId ": user.id,
+                  "N°chasis": car.numChassi,
+                  "immatriculation": car.numImmatriculation,
+                  "nbkilometre": car.nbKilometre,
+                  "carId": docid,
+                },
+              )
+            });
   }
 
   Future<void> transfertCar(
-      UserApp user, String usertransfert, String carId) async {
-    UserApp userTransfert =
-        UserApp(id: usertransfert, nom: "nom", email: "email", phone: "phone");
+      UserApp user, String usertransfertid, String carId) async {
+    UserApp userTransfert = UserApp(
+        id: usertransfertid, nom: "nom", email: "email", phone: "phone");
     Car car = await getCarFromID(carId, user);
-    car.userId = usertransfert;
+    car.userId = userTransfert.id;
     car.urlassurance = "";
     car.urlcartegrise = "";
-    List<Facture> factures = await getAllFactures(user);
+    car.carId = carId;
+    //ajout de la voiture au nouveau propriétaire
+    await addCarTransfert(userTransfert, car);
+    List<Facture> factures = await getFactures(user, car);
     for (dynamic item in factures) {
       Facture facture;
       facture = item;
       facture.carid = carId;
-      addFacture(userTransfert, facture);
-      FirebaseFirestore.instance
+      //ajout des factures au nouveau propriétaire
+      await addFacture(userTransfert, facture);
+      //supression des factures de l'utilisateur initial
+      await FirebaseFirestore.instance
           .collection('users')
           .doc(user.id)
           .collection("Factures")
           .doc(facture.factureid)
           .delete();
     }
-    addCar(userTransfert, car);
+    // supression de la voiture de l'ancien prorietaire
     FirebaseFirestore.instance
         .collection('users')
         .doc(user.id)
         .collection("Cars")
         .doc(carId)
         .delete();
+  }
+
+  // add new car
+  Future<void> addCarTransfert(UserApp user, Car car) async {
+    String docid = '';
+    await userCollection.doc(user.id).collection("Cars").doc(car.carId).set(
+      {
+        "marque": car.marque,
+        "modele": car.modele,
+        "annee": car.annee,
+        "userId ": user.id,
+        "N°chasis": car.numChassi,
+        "immatriculation": car.numImmatriculation,
+        "nbkilometre": car.nbKilometre,
+        "carId": docid,
+      },
+    );
   }
 
   //get list of use car
@@ -82,7 +116,7 @@ class DataBase {
   }
 
   Future<List<Car>> getCars(UserApp user) async {
-    debugPrint("get cars ....");
+    //depugPrint("get cars ....");
     List<Car> cars = [];
     await userCollection.doc(user.id).collection("Cars").get().then((value) => {
           for (dynamic item in value.docs)
@@ -104,7 +138,7 @@ class DataBase {
 
   Map<dynamic, dynamic> getMapCars(UserApp user) {
     final Map carsMap = <String, Car>{};
-    debugPrint("get cars ....");
+    //depugPrint("get cars ....");
     userCollection.doc(user.id).collection("Cars").get().then((value) => {
           for (dynamic item in value.docs)
             {
@@ -124,7 +158,6 @@ class DataBase {
   }
 
   Future<List<Facture>> getFactures(UserApp user, Car car) async {
-    debugPrint("get facture ....");
     List<Facture> factures = [];
     await userCollection
         .doc(user.id)
@@ -135,10 +168,10 @@ class DataBase {
         .then((value) => {
               for (dynamic item in value.docs)
                 {
-                  debugPrint("Facture from firebase :"),
-                  debugPrint(item["scanurl"]),
-                  debugPrint(item["nom"]),
-                  debugPrint(item["carid"]),
+                  //depugPrint("Facture from firebase :"),
+                  //depugPrint(item["scanurl"]),
+                  //depugPrint(item["nom"]),
+                  //depugPrint(item["carid"]),
                   factures.add(
                     Facture(
                         nom: item["nom"],
@@ -154,7 +187,7 @@ class DataBase {
   }
 
   Future<List<Facture>> getAllFactures(UserApp user) async {
-    debugPrint("get facture ....");
+    //depugPrint("get facture ....");
     List<Facture> factures = [];
     await userCollection
         .doc(user.id)
@@ -163,10 +196,10 @@ class DataBase {
         .then((value) => {
               for (dynamic item in value.docs)
                 {
-                  debugPrint("Facture from firebase :"),
-                  debugPrint(item["scanurl"]),
-                  debugPrint(item["nom"]),
-                  debugPrint(item["carid"]),
+                  //depugPrint("Facture from firebase :"),
+                  //depugPrint(item["scanurl"]),
+                  //depugPrint(item["nom"]),
+                  //depugPrint(item["carid"]),
                   factures.add(
                     Facture(
                         nom: item["nom"],
@@ -209,11 +242,12 @@ class DataBase {
         .collection("Factures")
         .add({}).then((docRef) => {
               docid = docRef.id,
+              facture.factureid = docid,
               FirebaseFirestore.instance
                   .collection('users')
                   .doc(user.id)
                   .collection("Factures")
-                  .doc(docRef.id)
+                  .doc(docid)
                   .set(
                 {
                   "nom": facture.nom,
@@ -225,7 +259,7 @@ class DataBase {
                 },
               )
             });
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(user.id)
         .collection("Cars")
@@ -242,14 +276,10 @@ class DataBase {
         "factureid": docid,
       },
     );
-    await userCollection.doc(user.id).collection("Factures").add({
-      "carid": facture.carid,
-      "date": facture.date,
-    });
   }
 
   Future<Car> getCarFromID(String idCar, UserApp user) async {
-    debugPrint("id voiture transfé " + idCar);
+    //depugPrint("id voiture transfé " + idCar);
     dynamic car =
         await userCollection.doc(user.id).collection("Cars").doc(idCar).get();
 
@@ -260,6 +290,7 @@ class DataBase {
         userId: user.id,
         nbKilometre: car['nbkilometre'],
         numImmatriculation: car['immatriculation'],
-        numChassi: car['N°chasis']);
+        numChassi: car['N°chasis'],
+        carId: car['carId']);
   }
 }

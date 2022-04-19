@@ -1,6 +1,5 @@
 import 'package:bill/models/user_app.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CustomTabBar extends StatelessWidget {
   final List<IconData> icons;
@@ -18,7 +17,7 @@ class CustomTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(selectedIndex.toString());
+    //depugPrint(selectedIndex.toString());
     return TabBar(
       indicatorPadding: EdgeInsets.zero,
       indicator: const BoxDecoration(

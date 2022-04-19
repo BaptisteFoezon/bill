@@ -22,7 +22,7 @@ register(String email, password, name, phone) async {
         id: auth.currentUser!.uid, nom: name, email: email, phone: phone);
     await DataBase().addUser(_user);
   } catch (e) {
-    debugPrint(e.toString());
+    //depugPrint(e.toString());
   }
 }
 
@@ -37,7 +37,7 @@ signIn(String email, password, context) async {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) {
-                        debugPrint("Material Page route");
+                        //depugPrint("Material Page route");
                         return NavScreen(user: user, index: 0);
                       },
                     ),
@@ -46,6 +46,6 @@ signIn(String email, password, context) async {
           },
         );
   } catch (e) {
-    debugPrint(e.toString());
+    //depugPrint(e.toString());
   }
 }

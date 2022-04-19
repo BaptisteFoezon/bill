@@ -166,7 +166,7 @@ class viewCarScreen extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () => {
-                              debugPrint("see carte grise"),
+                              //depugPrint("see carte grise"),
                             },
                             child: Column(
                               children: const [
@@ -183,7 +183,7 @@ class viewCarScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () => {
-                              debugPrint(" See assurance"),
+                              //depugPrint(" See assurance"),
                             },
                             child: Column(
                               children: const [

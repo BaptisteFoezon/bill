@@ -1,0 +1,401 @@
+@startuml
+set namespaceSeparator ::
+
+class "bill::models::user_app.dart::UserApp" {
+  +String id
+  +String nom
+  +String email
+  +String phone
+}
+
+class "bill::models::car.dart::Car" {
+  +String modele
+  +String marque
+  +String annee
+  +String userId
+  +String carId
+  +String nbKilometre
+  +String numChassi
+  +String numImmatriculation
+  +String urlcartegrise
+  +String urlassurance
+}
+
+class "bill::models::facture.dart::Facture" {
+  +String nom
+  +DateTime date
+  +String commentaire
+  +String carid
+  +String scanurl
+  +String factureid
+}
+
+class "bill::main.dart::MyApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::main.dart::MyApp"
+
+class "bill::Views::home::widget::emptycard.dart::CardEmpty" {
+  +double height
+  +double width
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::home::widget::emptycard.dart::CardEmpty"
+
+class "bill::Views::home::widget::card.dart::Card" {
+  -Car _car
+  +bool add
+  +Widget build()
+}
+
+"bill::Views::home::widget::card.dart::Card" o-- "bill::Models::car.dart::Car"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::home::widget::card.dart::Card"
+
+class "bill::Views::home::widget::hello_text.dart::HelloText" {
+  +String name
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::home::widget::hello_text.dart::HelloText"
+
+class "bill::Views::home::widget::car_list.dart::CarList" {
+  +UserApp userApp
+  +Widget build()
+}
+
+"bill::Views::home::widget::car_list.dart::CarList" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::home::widget::car_list.dart::CarList"
+
+class "bill::Views::home::home_page.dart::HomeScreen" {
+  +UserApp user
+  +Widget build()
+}
+
+"bill::Views::home::home_page.dart::HomeScreen" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::home::home_page.dart::HomeScreen"
+
+class "bill::Views::home::home_page.dart::LoadingSquellette" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::home::home_page.dart::LoadingSquellette"
+
+class "bill::Views::Car::view_car.dart::viewCarScreen" {
+  +UserApp user
+  +Car car
+  +Widget build()
+}
+
+"bill::Views::Car::view_car.dart::viewCarScreen" o-- "bill::models::user_app.dart::UserApp"
+"bill::Views::Car::view_car.dart::viewCarScreen" o-- "bill::models::car.dart::Car"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::Car::view_car.dart::viewCarScreen"
+
+class "bill::Views::Car::add_car.dart::AddCarScreen" {
+  +UserApp user
+  +Widget build()
+}
+
+"bill::Views::Car::add_car.dart::AddCarScreen" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::Car::add_car.dart::AddCarScreen"
+
+class "bill::Views::Car::add_car.dart::AddForm" {
+  +UserApp user
+  +_AddFormState createState()
+}
+
+"bill::Views::Car::add_car.dart::AddForm" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bill::Views::Car::add_car.dart::AddForm"
+
+class "bill::Views::Car::add_car.dart::_AddFormState" {
+  +TextEditingController nameController
+  +TextEditingController modeleController
+  +TextEditingController marqueController
+  +TextEditingController immatriculationController
+  +TextEditingController chassiController
+  +TextEditingController nbkilometreController
+  +TextEditingController anneeController
+  +void dispose()
+  +void initState()
+  +Widget build()
+}
+
+"bill::Views::Car::add_car.dart::_AddFormState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "bill::Views::Car::add_car.dart::_AddFormState"
+
+class "bill::Views::nav_screen.dart::NavScreen" {
+  +int index
+  +UserApp user
+  +_NavScreenState createState()
+}
+
+"bill::Views::nav_screen.dart::NavScreen" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bill::Views::nav_screen.dart::NavScreen"
+
+class "bill::Views::nav_screen.dart::_NavScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "bill::Views::nav_screen.dart::_NavScreenState"
+
+class "bill::Views::commons::custom_tab_bar.dart::CustomTabBar" {
+  +List<IconData> icons
+  +int selectedIndex
+  +dynamic Function(int) onTap
+  +UserApp user
+  +Widget build()
+}
+
+"bill::Views::commons::custom_tab_bar.dart::CustomTabBar" o-- "null::dynamic Function(int)"
+"bill::Views::commons::custom_tab_bar.dart::CustomTabBar" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::commons::custom_tab_bar.dart::CustomTabBar"
+
+class "bill::Views::Facture::view_fature_scree.dart::ViewFacture" {
+  +String url
+  +Facture facture
+  +Car car
+  +UserApp user
+  +Widget build()
+}
+
+"bill::Views::Facture::view_fature_scree.dart::ViewFacture" o-- "bill::models::facture.dart::Facture"
+"bill::Views::Facture::view_fature_scree.dart::ViewFacture" o-- "bill::models::car.dart::Car"
+"bill::Views::Facture::view_fature_scree.dart::ViewFacture" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::Facture::view_fature_scree.dart::ViewFacture"
+
+class "bill::Views::Facture::facture_list.dart::FactureList" {
+  +UserApp user
+  +Car car
+  +Widget build()
+}
+
+"bill::Views::Facture::facture_list.dart::FactureList" o-- "bill::models::user_app.dart::UserApp"
+"bill::Views::Facture::facture_list.dart::FactureList" o-- "bill::models::car.dart::Car"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::Facture::facture_list.dart::FactureList"
+
+class "bill::Views::Facture::facture_detail_screen.dart::FactureDetailScreen" {
+  +Facture facture
+  +Car car
+  +UserApp user
+  +State<FactureDetailScreen> createState()
+}
+
+"bill::Views::Facture::facture_detail_screen.dart::FactureDetailScreen" o-- "bill::models::facture.dart::Facture"
+"bill::Views::Facture::facture_detail_screen.dart::FactureDetailScreen" o-- "bill::models::car.dart::Car"
+"bill::Views::Facture::facture_detail_screen.dart::FactureDetailScreen" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bill::Views::Facture::facture_detail_screen.dart::FactureDetailScreen"
+
+class "bill::Views::Facture::facture_detail_screen.dart::_FactureDetailScreenState" {
+  +Future<String> downloadurl()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "bill::Views::Facture::facture_detail_screen.dart::_FactureDetailScreenState"
+
+class "bill::Views::Facture::facturescreen.dart::FactureScreen" {
+  +UserApp user
+  +Widget build()
+}
+
+"bill::Views::Facture::facturescreen.dart::FactureScreen" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::Facture::facturescreen.dart::FactureScreen"
+
+class "bill::Views::transfert::transfert.dart::TransfertScreen" {
+  +UserApp user
+  +State<TransfertScreen> createState()
+}
+
+"bill::Views::transfert::transfert.dart::TransfertScreen" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bill::Views::transfert::transfert.dart::TransfertScreen"
+
+class "bill::Views::transfert::transfert.dart::_TransfertScreenState" {
+  -GlobalKey<FormState> _formKey
+  +TextEditingController idController
+  +bool istransfere
+  +String? value
+  +void initState()
+  +void dispose()
+  +Widget build()
+}
+
+"bill::Views::transfert::transfert.dart::_TransfertScreenState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"bill::Views::transfert::transfert.dart::_TransfertScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "bill::Views::transfert::transfert.dart::_TransfertScreenState"
+
+class "bill::Views::scan::scan_screen.dart::PhotoScreen" {
+  +UserApp user
+  +Car? car
+  +Map<dynamic, dynamic> cars
+  +_PhotoScreenState createState()
+}
+
+"bill::Views::scan::scan_screen.dart::PhotoScreen" o-- "bill::models::user_app.dart::UserApp"
+"bill::Views::scan::scan_screen.dart::PhotoScreen" o-- "bill::models::car.dart::Car"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bill::Views::scan::scan_screen.dart::PhotoScreen"
+
+class "bill::Views::scan::scan_screen.dart::MyData" {
+  +String voiture
+  +DateTime date
+  +String garage
+  +String departement
+  +String commentaire
+  +String carId
+  +String nom
+  +String url
+}
+
+class "bill::Views::scan::scan_screen.dart::_PhotoScreenState" {
+  -File _image
+  -GlobalKey<FormState> _formKey
+  +ImagePicker picker
+  +bool loading
+  +bool transfertOk
+  +String dropdownCategorieValue
+  +DateTime? dateTime
+  +Car? carSelected
+  +String? value
+  +bool revisionSelect
+  +bool pneumatiqueSelect
+  +bool freinageSelect
+  +bool controleTechniqueSelect
+  +bool electriciteSelect
+  +bool couroieSelect
+  +bool embrayageSelect
+  +bool suspensionSelect
+  +Blob blob
+  {static} +MyData data
+  -int _activeStepIndex
+  +Future<dynamic> getImage()
+  +Future<void> uploadFile()
+  +Future<void> uploadFileWeb()
+  +List<Step> stepList()
+  +Widget build()
+}
+
+"bill::Views::scan::scan_screen.dart::_PhotoScreenState" o-- "dart::io::File"
+"bill::Views::scan::scan_screen.dart::_PhotoScreenState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"bill::Views::scan::scan_screen.dart::_PhotoScreenState" o-- "image_picker::image_picker.dart::ImagePicker"
+"bill::Views::scan::scan_screen.dart::_PhotoScreenState" o-- "bill::models::car.dart::Car"
+"bill::Views::scan::scan_screen.dart::_PhotoScreenState" o-- "cloud_firestore_platform_interface::src::blob.dart::Blob"
+"bill::Views::scan::scan_screen.dart::_PhotoScreenState" o-- "bill::Views::scan::scan_screen.dart::MyData"
+"flutter::src::widgets::framework.dart::State" <|-- "bill::Views::scan::scan_screen.dart::_PhotoScreenState"
+
+class "bill::Views::scan::scan_screen.dart::ConfirmStatus" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::scan::scan_screen.dart::ConfirmStatus"
+
+class "bill::Views::scan::scan_screen.dart::ContainerSelcted" {
+  +bool select
+  +String titre
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::scan::scan_screen.dart::ContainerSelcted"
+
+class "bill::Views::scan::scan_screen.dart::SelectedContainer" {
+  +bool selected
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::scan::scan_screen.dart::SelectedContainer"
+
+class "bill::Views::login_page.dart::LoginPage" {
+  +_LoginState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bill::Views::login_page.dart::LoginPage"
+
+class "bill::Views::login_page.dart::_LoginState" {
+  -GlobalKey<FormState> _formKey
+  +String error
+  +bool loading
+  -bool _passwordVisible
+  +TextEditingController emailController
+  +TextEditingController passwordController
+  +TextEditingController nameController
+  +TextEditingController phoneController
+  +bool showSignIn
+  +void initState()
+  +void dispose()
+  +void toggleView()
+  +Widget build()
+}
+
+"bill::Views::login_page.dart::_LoginState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"bill::Views::login_page.dart::_LoginState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "bill::Views::login_page.dart::_LoginState"
+
+class "bill::Views::profile::profile_screen.dart::ProfilScreen" {
+  +UserApp user
+  +Widget build()
+}
+
+"bill::Views::profile::profile_screen.dart::ProfilScreen" o-- "bill::models::user_app.dart::UserApp"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::profile::profile_screen.dart::ProfilScreen"
+
+class "bill::Views::profile::profile_screen.dart::LabelBold" {
+  +String contenu
+  +String title
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::profile::profile_screen.dart::LabelBold"
+
+class "bill::Views::widgets::responsive.dart::Responsive" {
+  +Widget mobile
+  +Widget tablet
+  +Widget desktop
+  {static} +bool isMobile()
+  {static} +bool isTablet()
+  {static} +bool isDesktop()
+  +Widget build()
+}
+
+"bill::Views::widgets::responsive.dart::Responsive" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::widgets::responsive.dart::Responsive"
+
+class "bill::Views::widgets::loading.dart::Loading" {
+  +Color color
+  +Widget build()
+}
+
+"bill::Views::widgets::loading.dart::Loading" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "bill::Views::widgets::loading.dart::Loading"
+
+class "bill::Views::splash_screen.dart::SplashScreen" {
+  +_SplashScreenState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "bill::Views::splash_screen.dart::SplashScreen"
+
+class "bill::Views::splash_screen.dart::_SplashScreenState" {
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "bill::Views::splash_screen.dart::_SplashScreenState"
+
+class "bill::services::database.dart::DataBase" {
+  +CollectionReference<Object?> userCollection
+  +Future<void> addUser()
+  +Future<UserApp> getUser()
+  +Future<void> addCar()
+  +Future<void> transfertCar()
+  +Future<void> addCarTransfert()
+  +Stream<QuerySnapshot<Object?>> getCarStream()
+  +Future<List<Car>> getCars()
+  +Map<dynamic, dynamic> getMapCars()
+  +Future<List<Facture>> getFactures()
+  +Future<List<Facture>> getAllFactures()
+  +Future<void> deleteFacture()
+  +Future<void> addFacture()
+  +Future<Car> getCarFromID()
+}
+
+"bill::services::database.dart::DataBase" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+
+
+@enduml

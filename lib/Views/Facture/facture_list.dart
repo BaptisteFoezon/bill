@@ -27,7 +27,7 @@ class FactureList extends StatelessWidget {
               factures.hasData.toString());
           debugPrint(factures.data.toString());
           if (factures.hasData) {
-            debugPrint("factures has data");
+            //depugPrint("factures has data");
             dynamic factureList = factures.data;
             return Scrollbar(
               child: ListView.builder(
@@ -36,7 +36,7 @@ class FactureList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () => {
-                        debugPrint("facture tap"),
+                        //depugPrint("facture tap"),
                         index < factures.data!.length
                             ? Get.offAll(
                                 () => FactureDetailScreen(

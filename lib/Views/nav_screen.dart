@@ -84,8 +84,10 @@ class _NavScreenState extends State<NavScreen> {
                   selectedIndex: _selectedIndex,
                   user: _userApp,
                   onTap: (index) => setState(
-                    () =>
-                        {_selectedIndex = index, debugPrint(index.toString())},
+                    () => {
+                      _selectedIndex = index,
+                      //depugPrint(index.toString())
+                    },
                   ),
                 ),
               ),

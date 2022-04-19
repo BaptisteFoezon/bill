@@ -1,14 +1,10 @@
-import 'dart:ui';
 import 'package:bill/Views/home/widget/emptycard.dart';
-import 'package:bill/Views/nav_screen.dart';
 import 'package:bill/models/car.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:bill/Views/Car/add_car.dart';
 import 'package:bill/Views/Car/view_car.dart';
-import 'package:bill/Views/widgets/loading.dart';
 import 'package:bill/services/database.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CarList extends StatelessWidget {
   UserApp userApp;
@@ -23,10 +19,10 @@ class CarList extends StatelessWidget {
           future: DataBase().getCars(userApp),
           initialData: const <Car>[],
           builder: (context, AsyncSnapshot<List<Car>> cars) {
-            debugPrint("LOG Car List has dat ? " + cars.hasData.toString());
-            debugPrint(cars.data.toString());
+            //depugPrint("LOG Car List has dat ? " + cars.hasData.toString());
+            //depugPrint(cars.data.toString());
             if (cars.hasData) {
-              debugPrint("cars has data");
+              //depugPrint("cars has data");
               dynamic carsList = cars.data;
               return ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -34,7 +30,7 @@ class CarList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () => {
-                        debugPrint("card tap"),
+                        //depugPrint("card tap"),
                         index < cars.data!.length
                             ? Navigator.of(context).push(
                                 MaterialPageRoute(
