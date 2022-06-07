@@ -1,10 +1,8 @@
 import 'dart:io';
 
-import 'package:bill/Views/widgets/loading.dart';
 import 'package:bill/models/car.dart';
 import 'package:bill/models/facture.dart';
 import 'package:bill/models/user_app.dart';
-import 'package:bill/Views/widgets/responsive.dart';
 import 'package:bill/services/database.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fs;
 
@@ -16,11 +14,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 
+import '../commons/widgets/loading.dart';
+import '../commons/widgets/responsive.dart';
+
 class PhotoScreen extends StatefulWidget {
-  UserApp user;
-  Car? car;
-  Map cars;
-  PhotoScreen({Key? key, required this.user, required this.cars, this.car})
+  final UserApp user;
+  final Car? car;
+  final Map cars;
+  const PhotoScreen(
+      {Key? key, required this.user, required this.cars, this.car})
       : super(key: key);
 
   @override
@@ -42,6 +44,890 @@ class _PhotoScreenState extends State<PhotoScreen> {
   File _image = File('');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  RevisionFacture detailRevision = RevisionFacture();
+  PneumatiqueFacture pneumatiqueFacture = PneumatiqueFacture();
+  FreinageFacture freinageFacture = FreinageFacture();
+  ControleTechniqueFacture controleTechniqueFacture =
+      ControleTechniqueFacture();
+  ElectriciteFacture electriciteFacture = ElectriciteFacture();
+  CourroieFacture courroieFacture = CourroieFacture();
+  EmbrayageFacture embrayageFacture = EmbrayageFacture();
+  AutreFacture autreFacture = AutreFacture();
+
+  Future<void> showinformationDialogRevision(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(child: Text("Révision")),
+                    const Text("Filtre :"),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: detailRevision.huileB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                detailRevision.huileB = !detailRevision.huileB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("huile"),
+                        Checkbox(
+                          value: detailRevision.pollenB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                detailRevision.pollenB =
+                                    !detailRevision.pollenB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("pollen/habitacle"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: detailRevision.airB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                detailRevision.airB = !detailRevision.airB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("air"),
+                        Checkbox(
+                          value: detailRevision.carburantB,
+                          onChanged: (value) => {
+                            setState(() {
+                              detailRevision.carburantB =
+                                  !detailRevision.carburantB!;
+                            }),
+                          },
+                        ),
+                        const Text("Carburant"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: detailRevision.freinB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                detailRevision.freinB = !detailRevision.freinB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("liquide de frein"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: detailRevision.transmitionB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                detailRevision.transmitionB =
+                                    !detailRevision.transmitionB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("huilde de transmission"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: detailRevision.boitevitesseB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                detailRevision.boitevitesseB =
+                                    !detailRevision.boitevitesseB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("huilde de boîte de vitesse"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: detailRevision.refroidissementB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                detailRevision.refroidissementB =
+                                    !detailRevision.refroidissementB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("huilde de refroidisement"),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      detailRevision.selected = true;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("valider"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      detailRevision = RevisionFacture();
+                      //detailRevision.selected = false;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("supprimer"),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> showinformationDialogPneumatique(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(child: Text("Pneumatique")),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: pneumatiqueFacture.avantB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                pneumatiqueFacture.avantB =
+                                    !pneumatiqueFacture.avantB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("avant"),
+                        Checkbox(
+                          value: pneumatiqueFacture.arriereB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                pneumatiqueFacture.arriereB =
+                                    !pneumatiqueFacture.arriereB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("arriere"),
+                      ],
+                    ),
+                    Column(
+                      children: const [
+                        Text("Marque des pneus :"),
+                        Text("______________")
+                        //TextFormField()
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text("Nombre :"),
+                        Checkbox(
+                          value: pneumatiqueFacture.twoB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                pneumatiqueFacture.twoB =
+                                    !pneumatiqueFacture.twoB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("2"),
+                        Checkbox(
+                          value: pneumatiqueFacture.fourB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                pneumatiqueFacture.fourB =
+                                    !pneumatiqueFacture.fourB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("4"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: pneumatiqueFacture.pneuHiverB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                pneumatiqueFacture.pneuHiverB =
+                                    !pneumatiqueFacture.pneuHiverB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Pneus hiver"),
+                      ],
+                    ),
+                    Row(
+                      children: const [
+                        Text("Dimenssion : ______________"), //TextFormField()
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: pneumatiqueFacture.geometrieB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                pneumatiqueFacture.geometrieB =
+                                    !pneumatiqueFacture.geometrieB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Géométrie"),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      pneumatiqueFacture.selected = true;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("valider"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      pneumatiqueFacture = PneumatiqueFacture();
+                      //detailRevision.selected = false;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("supprimer"),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> showinformationDialogFreingage(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(child: Text("Freinage")),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: freinageFacture.avantB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                freinageFacture.avantB =
+                                    !freinageFacture.avantB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("avant"),
+                        Checkbox(
+                          value: freinageFacture.arriereB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                freinageFacture.arriereB =
+                                    !freinageFacture.arriereB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("arriere"),
+                      ],
+                    ),
+                    const Text("Disque :"),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: freinageFacture.disqueAvantB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                freinageFacture.disqueAvantB =
+                                    !freinageFacture.disqueAvantB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Avant"),
+                        Checkbox(
+                          value: freinageFacture.disqueArriereB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                freinageFacture.disqueArriereB =
+                                    !freinageFacture.disqueArriereB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Arriere"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: freinageFacture.freinTambourB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                freinageFacture.freinTambourB =
+                                    !freinageFacture.freinTambourB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("frein tambour"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: freinageFacture.purgeLiquideB,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                freinageFacture.purgeLiquideB =
+                                    !freinageFacture.purgeLiquideB!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Purge de liquide de frein"),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      freinageFacture.selected = true;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("valider"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      freinageFacture = FreinageFacture();
+                      //detailRevision.selected = false;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("supprimer"),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> showinformationDialogControleTechnique(
+      BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(child: Text("Controle technique")),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: controleTechniqueFacture.favorable,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                controleTechniqueFacture.favorable =
+                                    !controleTechniqueFacture.favorable!;
+                                controleTechniqueFacture.contreVisite = false;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("favorable"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: controleTechniqueFacture.contreVisite,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                controleTechniqueFacture.contreVisite =
+                                    !controleTechniqueFacture.contreVisite!;
+                                controleTechniqueFacture.favorable = false;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Contre visite"),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      controleTechniqueFacture.selected = true;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("valider"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      controleTechniqueFacture = ControleTechniqueFacture();
+                      //detailRevision.selected = false;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("supprimer"),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> showinformationDialogElectricite(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(child: Text("Electricité")),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: electriciteFacture.alternateur,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                electriciteFacture.alternateur =
+                                    !electriciteFacture.alternateur!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Alternateur"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: electriciteFacture.batterie,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                electriciteFacture.batterie =
+                                    !electriciteFacture.batterie!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Batterie"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: electriciteFacture.demarreur,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                electriciteFacture.demarreur =
+                                    !electriciteFacture.demarreur!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Demarreur"),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      electriciteFacture.selected = true;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("valider"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      electriciteFacture = ElectriciteFacture();
+                      //detailRevision.selected = false;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("supprimer"),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> showinformationDialogCouroie(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(child: Text("Courroie")),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: courroieFacture.kitAccessoire,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                courroieFacture.kitAccessoire =
+                                    !courroieFacture.kitAccessoire!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Kit accessoire"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: courroieFacture.kitDeDistribution,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                courroieFacture.kitDeDistribution =
+                                    !courroieFacture.kitDeDistribution!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Kit de distribution"),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      courroieFacture.selected = true;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("valider"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      courroieFacture = CourroieFacture();
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("supprimer"),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> showinformationDialogAutre(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(child: Text("Autre")),
+                    const Text("Commentaire"),
+                    TextFormField(
+                      onChanged: (value) {
+                        setState(() {
+                          autreFacture.commentaire = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      autreFacture.selected = true;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("valider"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      autreFacture = AutreFacture();
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("supprimer"),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> showinformationDialogEmbrayage(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(child: Text("Embrayage")),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: embrayageFacture.butee,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                embrayageFacture.butee =
+                                    !embrayageFacture.butee!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Buttée"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: embrayageFacture.embrayage,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                embrayageFacture.embrayage =
+                                    !embrayageFacture.embrayage!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Embrayage"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: embrayageFacture.volantMoteur,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                embrayageFacture.volantMoteur =
+                                    !embrayageFacture.volantMoteur!;
+                              },
+                            ),
+                          },
+                        ),
+                        const Text("Volant Moteur"),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      embrayageFacture.selected = true;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("valider"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      embrayageFacture = EmbrayageFacture();
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("supprimer"),
+                )
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   final picker = ImagePicker();
   bool loading = false;
   bool transfertOk = false;
@@ -49,13 +935,15 @@ class _PhotoScreenState extends State<PhotoScreen> {
   Future getImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source);
 
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
+    setState(
+      () {
+        if (pickedFile != null) {
+          _image = File(pickedFile.path);
+        } else {
+          debugPrint('No image selected.');
+        }
+      },
+    );
   }
 
   Future<void> uploadFile(String destination, String filePath) async {
@@ -66,8 +954,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
           .ref(destination)
           .putFile(file);
     } on firebase_core.FirebaseException {
-      //depugPrint("error !!!!!!!!");
-      //depugPrint(e.toString());
+      debugPrint("erreur");
     }
   }
 
@@ -82,9 +969,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
   DateTime? dateTime = DateTime.now();
   Car? carSelected;
   String? value;
-  bool revisionSelect = false;
-  bool pneumatiqueSelect = false;
-  bool freinageSelect = false;
+
   bool controleTechniqueSelect = false;
   bool electriciteSelect = false;
   bool couroieSelect = false;
@@ -110,7 +995,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
                       children: [
                         Container(
                           child: _image.path.isEmpty
-                              ? const Text("Pas de facture selectionné")
+                              ? const Text("Pas de facture sélectionné")
                               : kIsWeb
                                   ? Text(basename(_image.toString()))
                                   : Image.file(_image),
@@ -131,7 +1016,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
                         TextButton.icon(
                           onPressed: () async => getImage(ImageSource.gallery),
                           icon: const Icon(Icons.file_download),
-                          label: const Text("importer depuis votre gallerie"),
+                          label: const Text("importer depuis votre galerie"),
                         )
                       ],
                     ),
@@ -142,102 +1027,97 @@ class _PhotoScreenState extends State<PhotoScreen> {
           state: _activeStepIndex <= 1 ? StepState.editing : StepState.complete,
           isActive: _activeStepIndex >= 1,
           title: const Text('Information'),
-          content: Container(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(widget.user.id)
-                  .collection("Cars")
-                  .snapshots(),
-              builder: (context, snapshot) {
-                List<DropdownMenuItem<String>> currencyItems = [];
-                if (!snapshot.hasData) {
-                  const Text("loading");
-                } else {
-                  for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                    DocumentSnapshot snap = snapshot.data!.docs[i];
-                    Map<String, dynamic> data =
-                        snap.data() as Map<String, dynamic>;
-                    currencyItems.add(
-                      DropdownMenuItem<String>(
-                        value: snap.id,
-                        child: Text(data["modele"]),
-                      ),
-                    );
-                  }
+          content: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .doc(widget.user.id)
+                .collection("Cars")
+                .snapshots(),
+            builder: (context, snapshot) {
+              List<DropdownMenuItem<String>> currencyItems = [];
+              if (!snapshot.hasData) {
+                const Text("loading");
+              } else {
+                for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                  DocumentSnapshot snap = snapshot.data!.docs[i];
+                  Map<String, dynamic> data =
+                      snap.data() as Map<String, dynamic>;
+                  currencyItems.add(
+                    DropdownMenuItem<String>(
+                      value: snap.id,
+                      child: Text(data["modele"]),
+                    ),
+                  );
                 }
+              }
 
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DropdownButtonFormField<dynamic>(
-                      decoration: const InputDecoration(
-                        labelText: 'Voiture',
-                      ),
-                      items: currencyItems.toList(),
-                      value: value,
-                      onSaved: (value) {
-                        data.carId = value;
-                      },
-                      onChanged: (value) {
-                        setState(
-                          () {
-                            this.value = value;
-                          },
-                        );
-                      },
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DropdownButtonFormField<dynamic>(
+                    decoration: const InputDecoration(
+                      labelText: 'Voiture',
                     ),
-                    InputDatePickerFormField(
-                      fieldLabelText: 'Date',
-                      fieldHintText: DateTime.now().day.toString() +
-                          "/" +
-                          DateTime.now().month.toString() +
-                          "/" +
-                          DateTime.now().year.toString(),
-                      firstDate: DateTime(1998),
-                      lastDate: DateTime(2222),
-                      onDateSaved: (date) {
-                        //depugPrint("value");
-                        dateTime = date;
+                    items: currencyItems.toList(),
+                    value: value,
+                    onSaved: (value) {
+                      data.carId = value;
+                    },
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          this.value = value;
+                        },
+                      );
+                    },
+                  ),
+                  InputDatePickerFormField(
+                    fieldLabelText: 'Date',
+                    fieldHintText: DateTime.now().day.toString() +
+                        "/" +
+                        DateTime.now().month.toString() +
+                        "/" +
+                        DateTime.now().year.toString(),
+                    firstDate: DateTime(1998),
+                    lastDate: DateTime(2222),
+                    onDateSaved: (date) {
+                      //depugPrint("value");
+                      dateTime = date;
 
-                        data.date = date;
-                      },
-                      onDateSubmitted: (date) {
-                        //depugPrint("value");
-                        data.date = date;
-                      },
-                      errorFormatText:
-                          "La date n'est pas dans un format valide",
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: "Titre de la facture"),
-                      onSaved: (value) {
-                        data.nom = value ?? " ";
-                      },
-                    ),
-                    TextFormField(
-                      decoration:
-                          const InputDecoration(labelText: "Nom du garage"),
-                      onSaved: (value) {
-                        data.garage = value ?? " ";
-                      },
-                    ),
-                    TextFormField(
-                      decoration:
-                          const InputDecoration(labelText: "Departement"),
-                      onSaved: (value) => data.departement = value ?? "",
-                    ),
-                    TextFormField(
-                      decoration:
-                          const InputDecoration(labelText: "Commentaire"),
-                      onSaved: (value) => data.commentaire = value ?? "",
-                    )
-                  ],
-                );
-              },
-            ),
+                      data.date = date;
+                    },
+                    onDateSubmitted: (date) {
+                      //depugPrint("value");
+                      data.date = date;
+                    },
+                    errorFormatText: "La date n'est pas dans un format valide",
+                  ),
+                  TextFormField(
+                    decoration:
+                        const InputDecoration(labelText: "Titre de la facture"),
+                    onSaved: (value) {
+                      data.nom = value ?? " ";
+                    },
+                  ),
+                  TextFormField(
+                    decoration:
+                        const InputDecoration(labelText: "Nom du garage"),
+                    onSaved: (value) {
+                      data.garage = value ?? " ";
+                    },
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: "Département"),
+                    onSaved: (value) => data.departement = value ?? "",
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: "Commentaire"),
+                    onSaved: (value) => data.commentaire = value ?? "",
+                  )
+                ],
+              );
+            },
           ),
         ),
         Step(
@@ -245,59 +1125,150 @@ class _PhotoScreenState extends State<PhotoScreen> {
           isActive: _activeStepIndex >= 2,
           title: const Text('Details'),
           content: SizedBox(
-              height: 300,
+              height: 400,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
-                    onTap: (() {
-                      revisionSelect = !revisionSelect;
-                      setState(() {});
+                    onTap: (() async {
+                      await showinformationDialogRevision(
+                        this.context,
+                      ).then((value) {
+                        setState(() {
+                          detailRevision;
+                        });
+                      });
+                      setState(() {
+                        detailRevision.selected = detailRevision.selected;
+                      });
                     }),
                     child: ContainerSelcted(
-                      select: revisionSelect,
-                      titre: "Revision",
+                      select: detailRevision.selected, //revisionSelect,
+                      titre: "Révision",
                     ),
                   ),
                   GestureDetector(
-                    onTap: (() {
-                      pneumatiqueSelect = !pneumatiqueSelect;
-                      setState(() {});
+                    onTap: (() async {
+                      await showinformationDialogPneumatique(
+                        this.context,
+                      ).then((value) {
+                        setState(() {
+                          pneumatiqueFacture;
+                        });
+                      });
+                      setState(() {
+                        pneumatiqueFacture;
+                      });
                     }),
                     child: ContainerSelcted(
-                      select: pneumatiqueSelect,
+                      select: pneumatiqueFacture.selected,
                       titre: "Pneumatique",
                     ),
                   ),
                   GestureDetector(
-                    onTap: (() {
-                      freinageSelect = !freinageSelect;
-                      setState(() {});
+                    onTap: (() async {
+                      await showinformationDialogFreingage(this.context)
+                          .then((value) {
+                        setState(() {
+                          freinageFacture;
+                        });
+                      });
+                      setState(() {
+                        freinageFacture;
+                      });
                     }),
                     child: ContainerSelcted(
-                      select: freinageSelect,
+                      select: freinageFacture.selected,
                       titre: "Freinage",
                     ),
                   ),
                   GestureDetector(
-                    onTap: (() {
-                      controleTechniqueSelect = !controleTechniqueSelect;
-                      setState(() {});
+                    onTap: (() async {
+                      await showinformationDialogControleTechnique(this.context)
+                          .then((value) {
+                        setState(() {
+                          controleTechniqueFacture;
+                        });
+                      });
+                      setState(() {
+                        controleTechniqueFacture;
+                      });
                     }),
                     child: ContainerSelcted(
-                      select: controleTechniqueSelect,
+                      select: controleTechniqueFacture.selected,
                       titre: "Controle technique",
                     ),
                   ),
                   GestureDetector(
-                    onTap: (() {
-                      electriciteSelect = !electriciteSelect;
-                      setState(() {});
+                    onTap: (() async {
+                      await showinformationDialogElectricite(this.context)
+                          .then((value) {
+                        setState(() {
+                          electriciteFacture;
+                        });
+                      });
+                      setState(() {
+                        electriciteFacture;
+                      });
                     }),
                     child: ContainerSelcted(
-                      select: electriciteSelect,
+                      select: electriciteFacture.selected,
                       titre: "Electricité",
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: (() async {
+                      await showinformationDialogCouroie(this.context)
+                          .then((value) {
+                        setState(() {
+                          electriciteFacture;
+                        });
+                      });
+
+                      setState(() {
+                        electriciteFacture;
+                      });
+                    }),
+                    child: ContainerSelcted(
+                      select: courroieFacture.selected,
+                      titre: "Couroie",
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: (() async {
+                      await showinformationDialogEmbrayage(this.context).then(
+                        (value) {
+                          setState(() {
+                            embrayageFacture;
+                          });
+                        },
+                      );
+                      setState(() {
+                        embrayageFacture;
+                      });
+                    }),
+                    child: ContainerSelcted(
+                      select: embrayageFacture.selected,
+                      titre: "Embrayage ",
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: (() async {
+                      await showinformationDialogAutre(this.context).then(
+                        (value) {
+                          setState(() {
+                            autreFacture;
+                          });
+                        },
+                      );
+                      setState(() {
+                        autreFacture;
+                      });
+                    }),
+                    child: ContainerSelcted(
+                      select: autreFacture.selected,
+                      titre: "Autre",
                     ),
                   )
                 ],
@@ -349,7 +1320,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
                                     : Colors.grey,
                               ),
                               onPressed: details.onStepCancel,
-                              child: const Text('Precedent'),
+                              child: const Text('Précédent'),
                             ),
                             const SizedBox(
                               width: 10,
@@ -387,8 +1358,8 @@ class _PhotoScreenState extends State<PhotoScreen> {
 
                                       await uploadFile(destination, _image.path)
                                           .whenComplete(
-                                              () => debugPrint("complete"));
-                                      String scanUrl = _image.path;
+                                        () => debugPrint("complete"),
+                                      );
                                       Facture facture = Facture(
                                           factureid: " ",
                                           nom: data.nom,
@@ -396,8 +1367,15 @@ class _PhotoScreenState extends State<PhotoScreen> {
                                           commentaire: data.commentaire,
                                           carid: data.carId,
                                           scanurl: data.url);
-                                      await DataBase()
-                                          .addFacture(widget.user, facture);
+                                      await DataBase().addFacture(
+                                          widget.user,
+                                          facture,
+                                          detailRevision.selected
+                                              ? detailRevision
+                                              : null,
+                                          pneumatiqueFacture.selected
+                                              ? pneumatiqueFacture
+                                              : null);
                                       setState(() {
                                         loading = false;
                                         transfertOk = true;
@@ -424,9 +1402,7 @@ class ConfirmStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Center(child: Text("Facture ajouté !")),
-    );
+    return const Center(child: Text("Facture ajouté !"));
   }
 }
 
@@ -458,8 +1434,8 @@ class ContainerSelcted extends StatelessWidget {
 }
 
 class SelectedContainer extends StatelessWidget {
-  bool selected;
-  SelectedContainer({
+  final bool selected;
+  const SelectedContainer({
     required this.selected,
     Key? key,
   }) : super(key: key);

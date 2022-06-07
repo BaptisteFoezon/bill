@@ -1,12 +1,12 @@
-import 'package:bill/Views/widgets/loading.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:bill/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../commons/widgets/customDrawer.dart';
+import '../commons/widgets/loading.dart';
 import '../nav_screen.dart';
 import '../scan/scan_screen.dart';
-import '../widgets/customDrawer.dart';
 
 class TransfertScreen extends StatefulWidget {
   UserApp user;
@@ -61,7 +61,16 @@ class _TransfertScreenState extends State<TransfertScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           children: [
-            const Text("Transfert"),
+            const SizedBox(
+              height: 18,
+            ),
+            const Text(
+              "Transfert",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             !istransfere
                 ? Form(
                     key: _formKey,
@@ -94,8 +103,7 @@ class _TransfertScreenState extends State<TransfertScreen> {
                             }
                             return DropdownButtonFormField<dynamic>(
                               decoration: const InputDecoration(
-                                labelText:
-                                    'Sélectionner véhicule à selectionner',
+                                labelText: 'Sélectionner véhicule à transférer',
                               ),
                               items: currencyItems.toList(),
                               value: value,

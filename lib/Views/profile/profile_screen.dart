@@ -1,5 +1,9 @@
 import 'package:bill/models/user_app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
+
+import '../commons/widgets/profile_widget.dart';
 
 class ProfilScreen extends StatelessWidget {
   UserApp user;
@@ -8,74 +12,68 @@ class ProfilScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Center(child: CircleAvatar(radius: 40)),
-                    const SizedBox(height: 10),
-                    LabelBold(
-                      contenu: user.nom,
-                      title: 'Nom: ',
-                    ),
-                    LabelBold(
-                      contenu: user.phone,
-                      title: 'Téléphone: ',
-                    ),
-                    LabelBold(
-                      contenu: user.email,
-                      title: 'Email: ',
-                    ),
-                    LabelBold(
-                      contenu: user.id,
-                      title: 'Id: ',
-                    ),
-                  ],
-                )
-              ],
-            ),
-            ElevatedButton.icon(
-              onPressed: () => {},
-              icon: const Icon(Icons.edit),
-              label: const Text("Modifier"),
-            )
-          ],
-        ),
+      body: ListView(
+        physics: const BouncingScrollPhysics(),
+        children: [
+          ProfileWidget(
+            imagePath: user.imgPath,
+            onClicked: () async {},
+          ),
+          const SizedBox(height: 10),
+          buildName(user, context),
+          ElevatedButton.icon(
+            onPressed: () => {},
+            icon: const Icon(Icons.edit),
+            label: const Text("Modifier"),
+          )
+        ],
       ),
     );
   }
 }
 
-class LabelBold extends StatelessWidget {
-  const LabelBold({
-    Key? key,
-    required this.title,
-    required this.contenu,
-  }) : super(key: key);
-
-  final String contenu;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
+Widget buildName(UserApp user, BuildContext context) => Column(
       children: [
         Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          user.nom,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
-        Text(contenu),
+        const SizedBox(height: 4),
+        Text(
+          user.email,
+          style: const TextStyle(color: Colors.grey),
+        ),
+        Text(
+          user.phone,
+          style: const TextStyle(color: Colors.grey),
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              user.id,
+              style: const TextStyle(color: Colors.grey),
+            ),
+            IconButton(
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: user.id));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Id copier dans le press papier"),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.copy),
+            ),
+            IconButton(
+              onPressed: () {
+                Share.share(
+                    "Voici mon Id sur l'application Bill : \n" + user.id);
+              },
+              icon: const Icon(Icons.share),
+            ),
+          ],
+        ),
       ],
     );
-  }
-}

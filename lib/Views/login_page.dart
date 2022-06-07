@@ -1,8 +1,8 @@
-import 'package:bill/Views/widgets/responsive.dart';
 import 'package:bill/services/service.dart';
 import 'package:flutter/material.dart';
 
 import 'commons/inputstyle.dart';
+import 'commons/widgets/responsive.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -80,8 +80,8 @@ class _LoginState extends State<LoginPage> {
                   ),
                   Text(
                     showSignIn
-                        ? "Bonjour ravis de vous revoir "
-                        : "Bonjour, nous smme heureux de vous compter bientot parmis nous",
+                        ? "Bonjour, nous ravis de vous revoir "
+                        : "Bonjour, nous somme heureux de vous compter bientôt parmis nous",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.white,
@@ -116,7 +116,7 @@ class _LoginState extends State<LoginPage> {
                                       value!.isEmpty ? "Numero" : null,
                                   style: const TextStyle(color: Colors.white),
                                   decoration: textinputdecoration.copyWith(
-                                      hintText: 'numéro de tel'),
+                                      hintText: 'Numéro de téléphone'),
                                 ),
                           TextFormField(
                             controller: emailController,
@@ -134,7 +134,7 @@ class _LoginState extends State<LoginPage> {
                                 : null,
                             style: const TextStyle(color: Colors.white),
                             decoration: textinputdecoration.copyWith(
-                              hintText: 'mot de passe',
+                              hintText: 'Mot de passe',
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
@@ -168,13 +168,14 @@ class _LoginState extends State<LoginPage> {
                               }
                             },
                             child:
-                                Text(showSignIn ? 'Connection' : 'Inscription'),
+                                Text(showSignIn ? 'Connexion' : 'Inscription'),
                           ),
                           TextButton(
-                              onPressed: () => toggleView(),
-                              child: Text(showSignIn
-                                  ? 'Pas encore inscrit ? cliquez ici'
-                                  : 'connexion'))
+                            onPressed: () => toggleView(),
+                            child: Text(showSignIn
+                                ? 'Pas encore inscrit ? cliquez ici'
+                                : 'Connexion'),
+                          )
                         ],
                       ),
                     ),

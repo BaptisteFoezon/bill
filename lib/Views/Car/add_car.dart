@@ -4,7 +4,7 @@ import 'package:bill/models/user_app.dart';
 import 'package:bill/services/database.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/customDrawer.dart';
+import '../commons/widgets/customDrawer.dart';
 
 class AddCarScreen extends StatelessWidget {
   UserApp user;
@@ -101,12 +101,12 @@ class _AddFormState extends State<AddForm> {
                   TextFormField(
                     controller: nameController,
                     decoration: const InputDecoration(
-                        label: Text("name"), hintText: "nom de la voiture"),
+                        label: Text("Nom"), hintText: "nom de la voiture"),
                   ),
                   TextFormField(
                     controller: modeleController,
                     decoration: const InputDecoration(
-                        label: Text("Modele"), hintText: "modele"),
+                        label: Text("Modèle"), hintText: "modèle"),
                   ),
                   TextFormField(
                     controller: marqueController,
@@ -116,24 +116,24 @@ class _AddFormState extends State<AddForm> {
                   TextFormField(
                     controller: anneeController,
                     decoration: const InputDecoration(
-                        label: Text("Annee"), hintText: "annee"),
+                        label: Text("Année"), hintText: "année"),
                   ),
                   TextFormField(
                     controller: immatriculationController,
                     decoration: const InputDecoration(
-                        label: Text("immatricumation"),
+                        label: Text("Immatriculation"),
                         hintText: "immatriculation"),
                   ),
                   TextFormField(
                     controller: nbkilometreController,
                     decoration: const InputDecoration(
-                        label: Text("Nb de kilommetre"),
-                        hintText: "nb de kilometre"),
+                        label: Text("Nb de kilomètres"),
+                        hintText: "nb de kilomètres"),
                   ),
                   TextFormField(
                     controller: chassiController,
                     decoration: const InputDecoration(
-                        label: Text("N° de chassis"), hintText: "XXXXXXXXXX"),
+                        label: Text("N° de châssis"), hintText: "XXXXXXXXXX"),
                   ),
                   ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(

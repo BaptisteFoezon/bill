@@ -1,9 +1,11 @@
-import 'package:bill/Views/widgets/loading.dart';
+import 'package:bill/Views/Facture/facture_detail_screen.dart';
+import 'package:bill/models/car.dart';
 import 'package:bill/models/facture.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/database.dart';
+import '../commons/widgets/loading.dart';
 
 class FactureScreen extends StatelessWidget {
   UserApp user;
@@ -16,7 +18,13 @@ class FactureScreen extends StatelessWidget {
         children: [
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 18.0),
-            child: Text("Mes Factures"),
+            child: Text(
+              "Mes Factures",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           SizedBox(
             height: 200,
@@ -42,6 +50,21 @@ class FactureScreen extends StatelessWidget {
                                     carid: factures.data![0].carid,
                                     scanurl: factures.data![0].scanurl,
                                     factureid: factures.data![0].factureid),
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return FactureDetailScreen(
+                                      facture: facture,
+                                      car: Car(
+                                          marque: "marque",
+                                          annee: "année",
+                                          modele: "modèle",
+                                          userId: "userId",
+                                          nbKilometre: "nbKilomètre",
+                                          numImmatriculation:
+                                              "numImmatriculation",
+                                          numChassi: "numChâssis"),
+                                      user: user);
+                                }))
                               },
                               child: Card(
                                 color: Colors.white,

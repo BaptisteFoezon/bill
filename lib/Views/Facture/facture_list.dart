@@ -1,12 +1,12 @@
 import 'package:bill/models/facture.dart';
 import 'package:bill/Views/Car/add_car.dart';
-import 'package:bill/Views/widgets/loading.dart';
 import 'package:bill/models/car.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:bill/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../commons/widgets/loading.dart';
 import 'facture_detail_screen.dart';
 
 class FactureList extends StatelessWidget {
@@ -21,13 +21,7 @@ class FactureList extends StatelessWidget {
         future: DataBase().getFactures(user, car),
         initialData: const <Facture>[],
         builder: (context, AsyncSnapshot<List<Facture>> factures) {
-          debugPrint("LOG Factures for car " +
-              car.carId +
-              " has dat ? " +
-              factures.hasData.toString());
-          debugPrint(factures.data.toString());
           if (factures.hasData) {
-            //depugPrint("factures has data");
             dynamic factureList = factures.data;
             return Scrollbar(
               child: ListView.builder(

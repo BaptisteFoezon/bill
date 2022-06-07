@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'Views/splash_screen.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
         supportedLocales: const [
           Locale('fr', ''), // English, no country code
         ],
+        navigatorKey: navigatorKey, // Setting a global key for navigator
+
         home: const SplashScreen());
   }
 }

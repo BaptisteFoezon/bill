@@ -28,12 +28,11 @@ register(String email, password, name, phone) async {
 
 signIn(String email, password, context) async {
   try {
-    print("sign in =>  go to NavScreen");
+    debugPrint("sign in =>  go to NavScreen");
     auth.signInWithEmailAndPassword(email: email, password: password).then(
           (value) => {
-            print(value),
             DataBase().getUser(value.user!.uid).then((user) => {
-                  print(user.id),
+                  debugPrint(user.id),
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) {

@@ -122,7 +122,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
                         TextButton.icon(
                           onPressed: () async => getImage(ImageSource.gallery),
                           icon: const Icon(Icons.file_download),
-                          label: const Text("importer depuis votre gallerie"),
+                          label: const Text("importer depuis votre galerie"),
                         )
                       ],
                     ),

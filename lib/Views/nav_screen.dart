@@ -1,12 +1,12 @@
 import 'package:bill/Views/Facture/facturescreen.dart';
 import 'package:bill/Views/profile/profile_screen.dart';
 import 'package:bill/Views/scan/scan_screen.dart';
-import 'package:bill/Views/widgets/customDrawer.dart';
 import 'package:bill/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:bill/models/user_app.dart';
 import '../services/service.dart';
 import 'commons/custom_tab_bar.dart';
+import 'commons/widgets/customDrawer.dart';
 import 'home/home_page.dart';
 
 class NavScreen extends StatefulWidget {

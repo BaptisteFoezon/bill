@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bill/models/car.dart';
 import 'package:bill/models/facture.dart';
 import 'package:bill/models/user_app.dart';
@@ -17,10 +19,7 @@ class DataBase {
   }
 
   Future<UserApp> getUser(String userid) async {
-    print("get user");
     dynamic test = await userCollection.doc(userid).get();
-    print("test");
-    //depugPrint(test.toString());
     return UserApp(
         id: test['id'],
         nom: test['name'],
@@ -158,7 +157,11 @@ class DataBase {
   }
 
   Future<List<Facture>> getFactures(UserApp user, Car car) async {
+    RevisionFacture revison;
     List<Facture> factures = [];
+    log(user.id);
+    log(car.carId);
+    Facture facture;
     await userCollection
         .doc(user.id)
         .collection("Cars")
@@ -166,20 +169,32 @@ class DataBase {
         .collection("Factures")
         .get()
         .then((value) => {
+              log("get factures"),
               for (dynamic item in value.docs)
                 {
-                  //depugPrint("Facture from firebase :"),
-                  //depugPrint(item["scanurl"]),
-                  //depugPrint(item["nom"]),
-                  //depugPrint(item["carid"]),
+                  facture = Facture(
+                    nom: item["nom"],
+                    carid: item["carid"],
+                    commentaire: item["commentaire"],
+                    date: item["date"].toDate(),
+                    scanurl: item["scanurl"],
+                    factureid: item["factureid"],
+                  ),
+                  if (item["révision"] != "null")
+                    {
+                      log(item["révision"].toString()),
+                      facture.revisionFacture =
+                          RevisionFacture().fromMap(item["révision"]),
+                    },
+                  if (item["pneumatique"] != "null")
+                    {
+                      log(item["pneumatique"].toString()),
+                      facture.pneumatiqueFacture =
+                          PneumatiqueFacture().fromMap(item["pneumatique"]),
+                    },
+                  log(item.toString()),
                   factures.add(
-                    Facture(
-                        nom: item["nom"],
-                        carid: item["carid"],
-                        commentaire: item["commentaire"],
-                        date: item["date"].toDate(),
-                        scanurl: item["scanurl"],
-                        factureid: item["factureid"]),
+                    facture,
                   )
                 }
             });
@@ -196,10 +211,6 @@ class DataBase {
         .then((value) => {
               for (dynamic item in value.docs)
                 {
-                  //depugPrint("Facture from firebase :"),
-                  //depugPrint(item["scanurl"]),
-                  //depugPrint(item["nom"]),
-                  //depugPrint(item["carid"]),
                   factures.add(
                     Facture(
                         nom: item["nom"],
@@ -234,8 +245,13 @@ class DataBase {
         .delete();
   }
 
-  Future<void> addFacture(UserApp user, Facture facture) async {
+  Future<void> addFacture(UserApp user, Facture facture,
+      [RevisionFacture? revisionFacture,
+      PneumatiqueFacture? pneumatiqueFacture,
+      FreinageFacture? freinageFacture,
+      ControleTechniqueFacture? controleTechniqueFacture]) async {
     String docid = '';
+
     await FirebaseFirestore.instance
         .collection('users')
         .doc(user.id)
@@ -256,6 +272,18 @@ class DataBase {
                   "scanurl": facture.scanurl,
                   "commentaire": facture.commentaire,
                   "factureid": docRef.id,
+                  "révision": revisionFacture == null
+                      ? "null"
+                      : revisionFacture.toMap(),
+                  "pneumatique": pneumatiqueFacture == null
+                      ? "null"
+                      : pneumatiqueFacture.toMap(),
+                  "freinage": freinageFacture == null
+                      ? "null"
+                      : freinageFacture.toMap(),
+                  "controle technique": controleTechniqueFacture == null
+                      ? "null"
+                      : controleTechniqueFacture.toMap(),
                 },
               )
             });
@@ -274,6 +302,9 @@ class DataBase {
         "scanurl": facture.scanurl,
         "commentaire": facture.commentaire,
         "factureid": docid,
+        "révision": revisionFacture == null ? "null" : revisionFacture.toMap(),
+        "pneumatique":
+            pneumatiqueFacture == null ? "null" : pneumatiqueFacture.toMap(),
       },
     );
   }

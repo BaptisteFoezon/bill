@@ -1,3 +1,4 @@
+import 'package:bill/Views/Facture/facture_detail_screen.dart';
 import 'package:bill/models/user_app.dart';
 import 'package:bill/Views/nav_screen.dart';
 import 'package:bill/models/car.dart';
@@ -5,7 +6,7 @@ import 'package:bill/Views/Facture/facture_list.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../widgets/customDrawer.dart';
+import '../commons/widgets/customDrawer.dart';
 
 class viewCarScreen extends StatelessWidget {
   UserApp user;
@@ -36,8 +37,7 @@ class viewCarScreen extends StatelessWidget {
         ],
       ),
       drawer: customDrawer(user, context),
-      body: Container(
-          child: Column(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
@@ -84,26 +84,16 @@ class viewCarScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Text(
-                        "Marque: " + car.marque,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        "N° immatriculation: " + car.numImmatriculation,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        "Modéle: " + car.modele,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        "Nbr km: " + car.nbKilometre,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                      Text(
-                        "N° chassis: " + car.numChassi,
-                        style: const TextStyle(color: Colors.black),
-                      ),
+                      LabelBold(title: "Marque : ", contenu: car.marque),
+                      LabelBold(
+                          title: "N° immatriculation : ",
+                          contenu: car.numImmatriculation),
+                      LabelBold(title: "Modèle : ", contenu: car.modele),
+                      LabelBold(
+                          title: "Nombre de Kilomètres : ",
+                          contenu: car.nbKilometre + " km"),
+                      LabelBold(
+                          title: "N° de châssis : ", contenu: car.numChassi),
                     ],
                   ),
                 ),
@@ -175,7 +165,7 @@ class viewCarScreen extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                                 Text(
-                                  "Carte Grise",
+                                  "Carte grise",
                                   style: TextStyle(color: Colors.white),
                                 )
                               ],
@@ -194,6 +184,9 @@ class viewCarScreen extends StatelessWidget {
                                 Text(
                                   "Assurance",
                                   style: TextStyle(color: Colors.white),
+                                ),
+                                SizedBox(
+                                  height: 35,
                                 )
                               ],
                             ),
@@ -207,7 +200,7 @@ class viewCarScreen extends StatelessWidget {
             ),
           )
         ],
-      )),
+      ),
     );
   }
 }

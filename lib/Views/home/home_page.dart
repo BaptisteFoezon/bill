@@ -2,7 +2,6 @@ import 'package:bill/Views/Car/add_car.dart';
 import 'package:bill/Views/home/widget/emptycard.dart';
 import 'package:bill/Views/nav_screen.dart';
 import 'package:bill/models/user_app.dart';
-import 'package:bill/models/car.dart';
 import 'package:bill/Views/home/widget/car_list.dart';
 import 'package:bill/Views/home/widget/hello_text.dart';
 import 'package:flutter/material.dart';
@@ -13,101 +12,90 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Car _testCar = Car(
-      marque: "marque",
-      annee: "annee",
-      modele: "modele",
-      userId: user.id,
-      nbKilometre: '',
-      numChassi: '',
-      numImmatriculation: '',
-    );
     double maxwith = MediaQuery.of(context).size.width;
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            HelloText(name: user.nom),
-            const Text(
-              "Mes voitures: ",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          HelloText(name: user.nom),
+          const Text(
+            "Mes voitures: ",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
-            CarList(userApp: user),
-            const SizedBox(
-              height: 20,
+          ),
+          CarList(userApp: user),
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            "Actions rapides :",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
-            const Text(
-              "Actions rapides :",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              fixedSize: Size(maxwith - 16, 20),
+              primary: Colors.black,
             ),
-            const SizedBox(
-              height: 20,
+            onPressed: () => {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return AddCarScreen(user: user);
+                  },
+                ),
+              )
+            },
+            icon: const Icon(Icons.car_rental),
+            label: const Text("Ajouter une voiture"),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              fixedSize: Size(maxwith - 16, 20),
+              primary: Colors.black,
             ),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(maxwith - 16, 20),
-                primary: Colors.black,
-              ),
-              onPressed: () => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AddCarScreen(user: user);
-                    },
-                  ),
-                )
-              },
-              icon: const Icon(Icons.car_rental),
-              label: const Text("Ajouter une voiture"),
+            onPressed: () => {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    //depugPrint("Material Page route");
+                    return NavScreen(user: user, index: 2);
+                  },
+                ),
+              )
+            },
+            icon: const Icon(Icons.file_download),
+            label: const Text("Ajouter une facture"),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              fixedSize: Size(maxwith - 16, 20),
+              primary: Colors.black,
             ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(maxwith - 16, 20),
-                primary: Colors.black,
-              ),
-              onPressed: () => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      //depugPrint("Material Page route");
-                      return NavScreen(user: user, index: 2);
-                    },
-                  ),
-                )
-              },
-              icon: const Icon(Icons.file_download),
-              label: const Text("Ajouter une facture"),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(maxwith - 16, 20),
-                primary: Colors.black,
-              ),
-              onPressed: () => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      //depugPrint("Material Page route");
-                      return NavScreen(user: user, index: 1);
-                    },
-                  ),
-                )
-              },
-              icon: const Icon(Icons.file_copy),
-              label: const Text("Voir mes factures"),
-            ),
-          ],
-        ),
+            onPressed: () => {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    //depugPrint("Material Page route");
+                    return NavScreen(user: user, index: 1);
+                  },
+                ),
+              )
+            },
+            icon: const Icon(Icons.file_copy),
+            label: const Text("Voir mes factures"),
+          ),
+        ],
       ),
     );
   }

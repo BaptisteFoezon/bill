@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1778221929",
+    "project_id": "bill-app-44182",
+    "storage_bucket": "bill-app-44182.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1778221929:android:301e03e8fb64bcf955b3f8",
+        "android_client_info": {
+          "package_name": "com.example.bill"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1778221929-oocfsvon37vlu491u2o047v97jtgd5ho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpxUOjwR1dcHABU-sCU06zih-oNGH-39w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1778221929-oocfsvon37vlu491u2o047v97jtgd5ho.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1778221929-punih31h5jhb3bsh9egesg3r272cfv7d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.baptiste.bill"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

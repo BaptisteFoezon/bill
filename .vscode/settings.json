@@ -1,4 +1,6 @@
 {
     "git.ignoreLimitWarning": true,
-    "DockerRun.DisableAutoGenerateConfig": true
+    "DockerRun.DisableAutoGenerateConfig": true,
+    "cmake.configureOnOpen": false,
+    "cSpell.language": "fr"
 }
