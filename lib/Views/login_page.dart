@@ -51,9 +51,8 @@ class _LoginState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final bool isDesktop = Responsive.isDesktop(context);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.black,
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Row(
           children: [
             isDesktop
@@ -91,7 +90,9 @@ class _LoginState extends State<LoginPage> {
                     height: 10,
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.4,
+                    height: showSignIn
+                        ? MediaQuery.of(context).size.height * 0.4
+                        : MediaQuery.of(context).size.height * 0.6,
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -120,8 +121,9 @@ class _LoginState extends State<LoginPage> {
                                 ),
                           TextFormField(
                             controller: emailController,
-                            validator: (value) =>
-                                value!.isEmpty ? "Entrer votre email" : null,
+                            validator: (value) => value!.isEmpty
+                                ? "Entrer un email valide"
+                                : null,
                             style: const TextStyle(color: Colors.white),
                             decoration:
                                 textinputdecoration.copyWith(hintText: 'email'),
@@ -129,9 +131,11 @@ class _LoginState extends State<LoginPage> {
                           TextFormField(
                             controller: passwordController,
                             obscureText: _passwordVisible,
-                            validator: (value) => value!.length < 6
-                                ? "Entrer votre mot de passe"
-                                : null,
+                            validator: (value) {
+                              return (value!.length < 6
+                                  ? "le mot de passe doit etre superieur a 6 caracteres"
+                                  : null);
+                            },
                             style: const TextStyle(color: Colors.white),
                             decoration: textinputdecoration.copyWith(
                               hintText: 'Mot de passe',
@@ -161,10 +165,17 @@ class _LoginState extends State<LoginPage> {
                                 var email = emailController.value.text;
                                 var name = nameController.value.text;
                                 var phone = phoneController.value.text;
-
+                                String test = " ";
                                 showSignIn
-                                    ? signIn(email, password, context)
-                                    : register(email, password, name, phone);
+                                    ? test =
+                                        await signIn(email, password, context)
+                                    : await register(
+                                        email, password, name, phone);
+                                if (test != " ") {
+                                  AlertDialog(
+                                    title: Text(test),
+                                  );
+                                }
                               }
                             },
                             child:
@@ -180,7 +191,10 @@ class _LoginState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  Text(error),
+                  Text(
+                    error,
+                    style: const TextStyle(color: Colors.red),
+                  ),
                 ],
               ),
             ),

@@ -32,6 +32,29 @@ class ProfilScreen extends StatelessWidget {
   }
 }
 
+class ModifyProfilScreen extends StatefulWidget {
+  UserApp user;
+  ModifyProfilScreen({Key? key, required this.user}) : super(key: key);
+
+  @override
+  State<ModifyProfilScreen> createState() => _ModifyProfilScreenState();
+}
+
+class _ModifyProfilScreenState extends State<ModifyProfilScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ProfileWidget(
+      imagePath: widget.user.imgPath,
+      onClicked: () async {},
+    );
+  }
+}
+
 Widget buildName(UserApp user, BuildContext context) => Column(
       children: [
         Text(

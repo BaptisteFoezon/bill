@@ -1,9 +1,10 @@
 import 'package:bill/Views/nav_screen.dart';
-import 'package:bill/models/car.dart';
 import 'package:bill/models/user_app.dart';
-import 'package:bill/services/database.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/car.dart';
+import '../../services/database.dart';
 import '../commons/widgets/customDrawer.dart';
 
 class AddCarScreen extends StatelessWidget {
@@ -56,6 +57,8 @@ class AddForm extends StatefulWidget {
 }
 
 class _AddFormState extends State<AddForm> {
+  Trace customTrace = FirebasePerformance.instance.newTrace('add-car');
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController modeleController = TextEditingController();
   final TextEditingController marqueController = TextEditingController();
@@ -140,6 +143,7 @@ class _AddFormState extends State<AddForm> {
                         primary: Colors.black,
                       ),
                       onPressed: () async => {
+                            await customTrace.start(),
                             await DataBase().addCar(
                               widget.user,
                               Car(
@@ -152,6 +156,7 @@ class _AddFormState extends State<AddForm> {
                                 numChassi: modeleController.text,
                               ),
                             ),
+                            await customTrace.stop(),
                             Navigator.push(
                               context,
                               MaterialPageRoute(

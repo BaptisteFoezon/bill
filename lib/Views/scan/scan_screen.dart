@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:bill/models/car.dart';
 import 'package:bill/models/facture.dart';
@@ -8,11 +9,11 @@ import 'package:firebase_storage/firebase_storage.dart' as fs;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-import 'package:firebase_core/firebase_core.dart' as firebase_core;
 
 import '../commons/widgets/loading.dart';
 import '../commons/widgets/responsive.dart';
@@ -42,6 +43,9 @@ class MyData {
 
 class _PhotoScreenState extends State<PhotoScreen> {
   File _image = File('');
+  final dynamic _firebaseStorage = firebase_storage.FirebaseStorage.instance;
+  Uint8List webImage = Uint8List(10);
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   RevisionFacture detailRevision = RevisionFacture();
@@ -933,28 +937,55 @@ class _PhotoScreenState extends State<PhotoScreen> {
   bool transfertOk = false;
 
   Future getImage(ImageSource source) async {
-    final pickedFile = await picker.pickImage(source: source);
+    // MOBILE
+    if (!kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(source: source);
 
-    setState(
-      () {
-        if (pickedFile != null) {
-          _image = File(pickedFile.path);
-        } else {
-          debugPrint('No image selected.');
-        }
-      },
-    );
+      if (image != null) {
+        var selected = File(image.path);
+
+        setState(() {
+          _image = selected;
+        });
+      } else {
+        debugPrint("No file selected");
+      }
+    }
+    // WEB
+    else if (kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var f = await image.readAsBytes();
+        setState(() {
+          _image = File("a");
+          webImage = f;
+        });
+      } else {
+        debugPrint("No file selected");
+      }
+    } else {
+      debugPrint("Permission not granted");
+    }
   }
 
   Future<void> uploadFile(String destination, String filePath) async {
-    File file = File(filePath);
-
-    try {
-      await firebase_storage.FirebaseStorage.instance
-          .ref(destination)
-          .putFile(file);
-    } on firebase_core.FirebaseException {
-      debugPrint("erreur");
+    Reference _reference = _firebaseStorage.ref().child(destination);
+    if (kIsWeb) {
+      await _reference
+          .putData(
+        webImage,
+        SettableMetadata(contentType: 'image/jpeg'),
+      )
+          .whenComplete(() async {
+        await _reference.getDownloadURL().then((value) {
+          debugPrint(value);
+        });
+      });
+    } else if (!kIsWeb) {
+      File file = File(filePath);
+      await _reference.putFile(file);
     }
   }
 
@@ -985,41 +1016,34 @@ class _PhotoScreenState extends State<PhotoScreen> {
           isActive: _activeStepIndex >= 0,
           title: const Text('Scanner'),
           content: Center(
-            child: Container(
-              child: kIsWeb
-                  ? TextButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.download),
-                      label: const Text("data"))
-                  : Column(
-                      children: [
-                        Container(
-                          child: _image.path.isEmpty
-                              ? const Text("Pas de facture sélectionné")
-                              : kIsWeb
-                                  ? Text(basename(_image.toString()))
-                                  : Image.file(_image),
-                        ),
-                        isDesktop
-                            ? const SizedBox.shrink()
-                            : TextButton.icon(
-                                onPressed: () async {
-                                  await getImage(ImageSource.camera);
+            child: Column(
+              children: [
+                Container(
+                  child: _image.path.isEmpty
+                      ? const Text("Pas de facture sélectionné")
+                      : kIsWeb
+                          ? Text(basename(_image.toString()))
+                          : Image.file(_image),
+                ),
+                kIsWeb
+                    ? const SizedBox.shrink()
+                    : TextButton.icon(
+                        onPressed: () async {
+                          await getImage(ImageSource.camera);
 
-                                  setState(() {
-                                    _image = File(_image.path);
-                                  });
-                                },
-                                icon: const Icon(Icons.camera),
-                                label: const Text("scanner une facture"),
-                              ),
-                        TextButton.icon(
-                          onPressed: () async => getImage(ImageSource.gallery),
-                          icon: const Icon(Icons.file_download),
-                          label: const Text("importer depuis votre galerie"),
-                        )
-                      ],
-                    ),
+                          setState(() {
+                            _image = File(_image.path);
+                          });
+                        },
+                        icon: const Icon(Icons.camera),
+                        label: const Text("scanner une facture"),
+                      ),
+                TextButton.icon(
+                  onPressed: () async => getImage(ImageSource.gallery),
+                  icon: const Icon(Icons.file_download),
+                  label: const Text("importer depuis votre galerie"),
+                )
+              ],
             ),
           ),
         ),

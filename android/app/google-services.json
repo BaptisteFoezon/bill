@@ -31,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "1778221929-punih31h5jhb3bsh9egesg3r272cfv7d.apps.googleusercontent.com",
+              "client_id": "1778221929-8gsv9o4egreeoueim2h6urc8001asor1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.baptiste.bill"
+                "bundle_id": "com.example.app"
               }
             }
           ]
