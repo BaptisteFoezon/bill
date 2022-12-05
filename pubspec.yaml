@@ -57,6 +57,7 @@ dependencies:
   flutter_share: ^2.0.0
   document_scanner_flutter: ^0.2.7
   advance_pdf_viewer: ^2.0.1
+  firebase_dynamic_links: ^5.0.7
 
 dev_dependencies:
   build_runner: 2.2.0
